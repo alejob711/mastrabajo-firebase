@@ -1,0 +1,254 @@
+<!-- ======================= Start Banner ===================== -->
+<div class="utf_main_banner_area" style="background-image:url(assets/img/banner-homepage.jpeg);" data-overlay="8">
+    <div class="container">
+      <div class="col-md-10 col-sm-10">
+        <div class="caption cl-white home_two_slid">
+          <h2>Encontrá <br>trabajo de<br>la manera<br> <span class="como-extrabold"><span class="theme-cl">más</span> fácil</span></h2>
+        </div>
+        <div>
+          <p>Categorías mas solicitadas: <span class="trending_key"><a href="#">Administración</a></span> <span
+            class="trending_key"><a href="#">Logistica</a></span> <span class="trending_key"><a
+              href="#">Programación</a></span> <span class="trending_key"><a href="#">Atencion al cliente</a></span>
+          </p>
+          <form>
+            <fieldset class="utf_home_form_one">
+              <div class="col-md-4 col-sm-4 padd-0">
+                <input type="text" class="form-control br-1" placeholder="Ingrese palabra clave..." />
+              </div>
+              <div class="col-md-3 col-sm-3 padd-0">
+                <select class="wide form-control br-1">
+                  <option data-display="Ubicación">Todas</option>
+                  <option value="1">Cordoba</option>
+                  <option value="2">Villa Maria</option>
+                  <option value="3">Villa Nueva</option>
+                  <option value="4">Pozo del Molle</option>
+                  <option value="5">Las Varillas</option>
+                  <option value="6">Hernando</option>
+                  <option value="7">Etruria</option>
+                </select>
+              </div>
+              <div class="col-md-3 col-sm-3 padd-0">
+                <select class="wide form-control">
+                  <option data-display="Categoría">Todas</option>
+                  <option value="1">Administracion</option>
+                  <option value="2">Contabilidad</option>
+                  <option value="3">Programacion</option>
+                  <option value="4">Logistica</option>
+                  <option value="5">Vetas</option>
+                  <option value="6">Gastronomia</option>
+                  <option value="7">Diseño</option>
+                  <option value="8">Educacion</option>
+                  <option value="9">Back end Developer</option>
+                </select>
+              </div>
+              <div class="col-md-2 col-sm-2 padd-0 m-clear">
+                <button type="submit" class="btn theme-btn cl-white seub-btn">Buscar</button>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ======================= End Banner ===================== -->
+  
+  <!-- ================= Job start ========================= -->
+  <section class="padd-top-80 padd-bot-80">
+    <div class="container">
+      <!-- <ul class="nav nav-tabs nav-advance theme-bg" role="tablist">
+          <li class="nav-item active"> <a class="nav-link" data-toggle="tab" href="#recent" role="tab"> Latest Jobs</a> </li>
+          <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#" role="tab"> Recent Jobs</a> </li>
+        </ul> -->
+      <div class="row">
+        <div class="col">
+          <h2 class="text-center padd-bot-40">¡Estas son nuestras ultimas solicitudes,<br> seguro hay más de una para <span class="vos">vos!</span>
+          </h2>
+        </div>
+      </div>
+      <div class="tab-content">
+        <div class="tab-pane fade in show active" id="recent" role="tabpanel">
+          <div class="row verticalAlignElements">
+            
+            <!-- Single Job -->
+            <div *ngFor="let trabajo of todosLosTrabajos | async" class="col-md-3 col-sm-6">
+              <div class="utf_grid_job_widget_area"> 
+                <!-- <span class="job-type full-type">{{obtenerTipoTrabajo(trabajo.tipoTrabajoId)}}</span> -->
+                <!-- <div class="utf_job_like">
+                    <label class="toggler toggler-danger">
+                      <input type="checkbox" checked>
+                      <i class="fa fa-heart"></i> 
+                    </label>
+                  </div> -->
+                <div class="u-content">
+                  <div class="avatar box-80"> 
+                    <a *ngIf="!trabajo.noEspecificarEmpresa" href="employer-detail.html"> <img class="img-responsive" [src]="obtenerImagenEmpresa(trabajo.empresaId)" alt=""> </a> 
+                    <a *ngIf="trabajo.noEspecificarEmpresa" href="employer-detail.html"> <img class="img-responsive" src="../../../../assets/img/logo-black.png" alt=""> </a> 
+                  </div>
+                  <p *ngIf="!trabajo.noEspecificarEmpresa" class="text-muted">{{trabajo.empresaNombre}}</p>
+                  <p *ngIf="trabajo.noEspecificarEmpresa" class="text-muted">{{trabajo.alternativaNombre}}</p>
+                  <h5><a href="employer-detail.html">{{trabajo.puestoTrabajo | substring:25}}</a></h5>
+                  <p class="text-muted descripcionPuesto">{{trabajo.descripcionPuesto | substring:135}}</p>
+                </div>
+                <div class="utf_apply_job_btn_item"> <a href="job-detail.html"
+                    class="btn job-browse-btn btn-radius br-light">Aplicar</a> </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-md-12 mrg-top-20 text-center">
+        <a routerLink="/trabajos" class="btn theme-btn btn-m">Ver todas las solicitudes</a>
+      </div>
+    </div>
+  </section>
+  
+  <!-- ================= Category start ========================= -->
+  <section class="utf_job_category_area">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <div class="heading">
+            <h2>Categorías de solicitudes</h2>
+            <p>Encontrá tu trabajo ideal dentro de las categorías más solicitadas</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <div class="col-md-3 col-sm-6">
+            <a href="browse-job.html" title="">
+              <div class="utf_category_box_area">
+                <div class="utf_category_desc">
+                  <div class="utf_category_icon"> <i class="icon-bargraph" aria-hidden="true"></i> </div>
+                  <div class="category-detail utf_category_desc_text">
+                    <h4 class="texto-violeta">Programación</h4>
+                    <p *ngIf="todosLosTrabajos">{{cantSolicitProgramacion}} Solicitudes</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <a href="browse-job.html" title="">
+              <div class="utf_category_box_area">
+                <div class="utf_category_desc">
+                  <div class="utf_category_icon"> <i class="icon-tools" aria-hidden="true"></i> </div>
+                  <div class="category-detail utf_category_desc_text">
+                    <h4 class="texto-violeta">Administración</h4>
+                    <p>{{cantSolicitAdministracion}} solicitudes</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <a href="browse-job.html" title="">
+              <div class="utf_category_box_area">
+                <div class="utf_category_desc">
+                  <div class="utf_category_icon"> <i class="ti-briefcase" aria-hidden="true"></i> </div>
+                  <div class="category-detail utf_category_desc_text">
+                    <h4 class="texto-violeta">Contabilidad</h4>
+                    <p>VER TRELLO!!</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <a href="browse-job.html" title="">
+              <div class="utf_category_box_area">
+                <div class="utf_category_desc">
+                  <div class="utf_category_icon"> <i class="ti-ruler-pencil" aria-hidden="true"></i> </div>
+                  <div class="category-detail utf_category_desc_text">
+                    <h4 class="texto-violeta">Logística</h4>
+                    <p>{{cantSolicitLogistica}} Solicitudes</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <a href="browse-job.html" title="">
+              <div class="utf_category_box_area">
+                <div class="utf_category_desc">
+                  <div class="utf_category_icon"> <i class="icon-briefcase" aria-hidden="true"></i> </div>
+                  <div class="category-detail utf_category_desc_text">
+                    <h4 class="texto-violeta">Ventas</h4>
+                    <p>{{cantSolicitVentas}} Solicitudes</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <a href="browse-job.html" title="">
+              <div class="utf_category_box_area">
+                <div class="utf_category_desc">
+                  <div class="utf_category_icon"> <i class="icon-wine" aria-hidden="true"></i> </div>
+                  <div class="category-detail utf_category_desc_text">
+                    <h4 class="texto-violeta">Gastronomía</h4>
+                    <p>{{cantSolicitGastronomia}} Solicitudes</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <a href="browse-job.html" title="">
+              <div class="utf_category_box_area">
+                <div class="utf_category_desc">
+                  <div class="utf_category_icon"> <i class="ti-world" aria-hidden="true"></i> </div>
+                  <div class="category-detail utf_category_desc_text">
+                    <h4 class="texto-violeta">Comunicación</h4>
+                    <p>{{cantSolicitComunicacion}} solicitudes</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div class="col-md-3 col-sm-6">
+            <a href="browse-job.html" title="">
+              <div class="utf_category_box_area">
+                <div class="utf_category_desc">
+                  <div class="utf_category_icon"> <i class="ti-desktop" aria-hidden="true"></i> </div>
+                  <div class="category-detail utf_category_desc_text">
+                    <h4 class="texto-violeta">Educación</h4>
+                    <p>{{cantSolicitEducacion}} Solicitudes</p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <!-- <div class="col-md-12 mrg-top-20 text-center">
+            <a href="browse-category.html" class="btn theme-btn btn-m">Ver todas las categorías</a>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="newsletter theme-bg" style="background-image:url(assets/img/registrate-homepage.jpg)">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-1 landmarkBannerCol">
+          <img class="img-responsive" src="assets/img/landmarkicon.png" alt="">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+          <div class="heading light">
+            <h2>Tu lugar para <span class="como-extrabold"> crecer</span></h2>
+            <p class="como-medium">¡No esperes <span class="como-extrabold">más</span>!</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <div class="newsletter-box text-center">
+            <a href="browse-category.html" class="btn theme-btn btn-m "><b>Me quiero Registrar</b></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>

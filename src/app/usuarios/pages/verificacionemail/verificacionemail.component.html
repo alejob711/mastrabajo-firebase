@@ -1,0 +1,40 @@
+<!-- ======================= Page Title ===================== -->
+<div class="page-title">
+    <div class="container">
+      <div class="page-caption">
+        <h2>¡Bienvenido a mas trabajo!</h2>
+        <p><a href="#" title="Home">Inicio</a> <i class="ti-angle-double-right"></i> Verificacion Email</p>
+      </div>
+    </div>
+  </div>
+  <!-- ======================= End Page Title ===================== --> 
+  
+  <!-- ====================== Start Job Detail 2 ================ -->
+  <section class="padd-top-40 padd-bot-40">
+    <div class="container"> 
+      <!-- row -->
+      <div class="row">
+        <div class="col">
+
+            <h2 class="text-center">¡Gracias por registrarte!</h2>
+            <div class="formGroup" *ngIf="authService.userData as user">
+                <p class="text-center">Hemos enviado un email de verificacion a <strong>{{user.email}}</strong>.</p>
+                <p class="text-center">Por favor, verifica tu casilla de correo y haz click en el enlace para verificar tu direccion de email.</p>
+            </div>
+            
+            <!-- Calling SendVerificationMail() method using authService Api -->
+            <div class="formGroup text-center">
+                <button type="button" class="btn" (click)="sendVerificationEmail(authService.userData)">
+                    Reenviar verificacion
+                    <i class="fas fa-redo-alt"></i>
+                </button>
+            </div>
+            </div>
+
+      </div>
+    </div>
+</section>
+
+
+
+

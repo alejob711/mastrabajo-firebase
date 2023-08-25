@@ -1,0 +1,25 @@
+.dashboard_nav_item ul li a.active {
+    background: #3e6dc9;
+    border: 2px solid #3e6dc9;
+    box-shadow: 0 3px 3px rgb(0 0 0 / 10%);
+}
+
+a{
+    cursor: pointer;
+}
+.user-photo-action {
+    /* background: rgba(38, 174, 97, 0.8); */
+    background: rgb(90 66 91 / 80%);
+    bottom: 0px;
+    color: #ffffff;
+    left: 0px;
+    padding: 10px 0;
+    border-radius: 0 0 8px 8px;
+    position: absolute;
+    height: 44px;
+    line-height: 22px;
+    font-weight: 500;
+    /* right: 10px; */
+    text-align: center;
+    width: 100%;
+}

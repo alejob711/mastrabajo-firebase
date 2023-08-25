@@ -1,0 +1,151 @@
+<!-- ======================= Start Page Title ===================== -->
+<div class="page-title">
+  <div class="container">
+    <div class="page-caption">
+      <h2>{{estadoPantalla}} Empresa</h2>
+      <p><a [routerLink]="['/usuarios',  authService.userID]" title="Home">Inicio</a> <i class="ti-angle-double-right"></i> <a (click)="goBack()" style="cursor: pointer; font-weight: bolder;"> Empresas </a> <i class="ti-angle-double-right"></i> {{estadoPantalla}} Empresa</p>
+    </div>
+  </div>
+</div>
+<!-- ======================= End Page Title ===================== -->
+
+<!-- ======================= Start Create Company ===================== -->
+<section class="utf_create_company_area padd-top-80 padd-bot-80">
+  <div class="container">
+    <form [formGroup]="empresaForm" (ngSubmit)="submitEmpresaData()" class="c-form">
+      
+      <!-- General Information -->
+      <div class="box">
+        <div class="box-header">
+          <h4>Información General</h4>
+        </div>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-md-4 col-sm-6 col-xs-12">
+              <label>Nombre de la empresa *</label>
+              <input type="text" formControlName="nombre" class="form-control" required>
+              <span *ngIf="empresaForm.get('nombre')?.hasError('required') && empresaForm.controls['nombre'].touched"
+                class="form-text text-danger">Este campo es obligatorio</span>
+            </div>
+            <span *ngIf="!empresa; else estructuraActualizarEmpresa">
+              <div class="col-md-4 col-sm-6 col-xs-12">
+                <label>Rubro *</label>
+                <select class="wide form-control" formControlName="rubro">
+                  <option *ngFor="let rubro of todosLosRubros | async" [ngValue]="rubro.id">{{rubro.nombre}}</option>
+                </select>
+                <span
+                  *ngIf="empresaForm.get('rubro')?.hasError('required') && empresaForm.controls['rubro'].touched"
+                  class="form-text text-danger">Este campo es obligatorio</span>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12">
+                <label>Logo Empresarial <span *ngIf="empresa"> Actual </span> </label>
+                <div class="custom-file-upload">
+                  <input (change)="crearArchivo($event)" type="file" id="file" name="myfiles" accept="image/png, image/gif, image/jpeg" style="cursor: pointer;" />
+                </div>
+              </div>
+            </span>
+            <ng-template #estructuraActualizarEmpresa>
+              <div class="col-md-3 col-sm-6 col-xs-12">
+                <label>Rubro *</label>
+                <select class="wide form-control" formControlName="rubro">
+                  <option *ngFor="let rubro of todosLosRubros | async" [ngValue]="rubro.id">{{rubro.nombre}}</option>
+                </select>
+                <span
+                  *ngIf="empresaForm.get('rubro')?.hasError('required') && empresaForm.controls['rubro'].touched"
+                  class="form-text text-danger">Este campo es obligatorio</span>
+              </div>
+              <div class="col-md-4 col-sm-6 col-xs-12">
+                <label>Logo Empresarial</label>
+                <div class="custom-file-upload">
+                  <input (change)="crearArchivo($event)" type="file" id="file" name="myfiles" accept="image/png, image/gif, image/jpeg" style="cursor: pointer;" />
+                </div>
+              </div>
+              <div class="col-md-1 col-sm-6 col-xs-12 padd-0">
+                <img [src]="empresa.imgLogo" class="avatar avatar-lg imgLogoActual">
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+
+      <!-- Direccion de la empresa -->
+      <div class="box">
+        <div class="box-header">
+          <h4>Dirección de la empresa</h4>
+        </div>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-md-4 col-sm-6 col-xs-12 mrg-bot-10">
+              <label>Email *</label>
+              <input formControlName="email" class="form-control" placeholder="Email">
+              <span *ngIf="empresaForm.get('email')?.hasError('required') && empresaForm.controls['email'].touched"
+                class="form-text text-danger">Este campo es obligatorio</span>
+              <span
+                *ngIf="(empresaForm.get('email')?.hasError('email') || empresaForm.get('email')?.hasError('invalidEmail')) && empresaForm.controls['email'].touched"
+                class="form-text text-danger">El texto ingresado debe ser un email.</span>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12  mrg-bot-10">
+              <label>Teléfono *</label>
+              <input formControlName="telefono" class="form-control" placeholder="Teléfono">
+              <span
+                *ngIf="empresaForm.get('telefono')?.hasError('required') && empresaForm.controls['telefono'].touched"
+                class="form-text text-danger">Este campo es obligatorio</span>
+            </div>
+            <div class="col-md-4 col-sm-6 col-xs-12  mrg-bot-10">
+              <label>Página Web</label>
+              <input formControlName="paginaWeb" class="form-control" placeholder="Página Web">
+            </div>
+            <div class="col-md-12 col-sm-12 col-xs-12  mrg-bot-10" *ngIf="isApiLoaded">
+              <label>Dirección *</label>
+              <input formControlName="direccion" placeholder="Dirección, ciudad, provincia, pais" class="form-control"
+                [options]="options" ngx-google-places-autocomplete (onAddressChange)="handleAddressChange($event)" />
+              <span
+                *ngIf="empresaForm.get('direccion')?.hasError('required') && empresaForm.controls['direccion'].touched"
+                class="form-text text-danger">Este campo es obligatorio</span>
+            </div>
+            <div class="col-sm-6 col-xs-12  mrg-bot-10">
+              <label>Ciudad *</label>
+              <input formControlName="ciudad" class="form-control" placeholder="Ciudad">
+              <span *ngIf="empresaForm.get('ciudad')?.hasError('required') && empresaForm.controls['ciudad'].touched"
+                class="form-text text-danger">Este campo es obligatorio</span>
+            </div>
+            <div class="col-sm-6 col-xs-12 mrg-bot-10">
+              <label>Provincia *</label>
+              <input formControlName="provincia" class="form-control" placeholder="Provincia">
+              <span
+                *ngIf="empresaForm.get('provincia')?.hasError('required') && empresaForm.controls['provincia'].touched"
+                class="form-text text-danger">Este campo es obligatorio</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resumen de la empresa -->
+      <div class="box">
+        <div class="box-header">
+          <h4>Resumen de la Empresa *</h4>
+          <p class="aclaracionResumenEmpresa"> (El texto ingresado sera visualizado en las postulaciones de trabajo
+            creadas)</p>
+        </div>
+        <div class="box-body">
+          <div class="row">
+            <div class="col-sm-12">
+              <textarea formControlName="resumen" style="resize:none" rows="10" class="form-control"
+                placeholder="Ingrese resumen"></textarea>
+              <span *ngIf="empresaForm.get('resumen')?.hasError('required') && empresaForm.controls['resumen'].touched"
+                class="form-text text-danger">Este campo es obligatorio</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón Guardar -->
+      <div class="text-center">
+        <button *ngIf="!empresa" class="btn btn-m theme-btn full-width">Guardar</button>
+        <button *ngIf="empresa" class="btn btn-m theme-btn full-width">Actualizar</button>
+      </div>
+
+    </form>
+  </div>
+</section>
+<!-- ====================== End Create Company ================ -->

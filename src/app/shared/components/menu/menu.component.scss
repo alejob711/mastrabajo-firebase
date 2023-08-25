@@ -1,0 +1,66 @@
+.navbar>.container{
+    display: block;
+}
+
+ul.nav.navbar-nav.navbar-left{
+    padding-left: 5vw;
+    margin-top: 10px;
+}
+
+.tipoUsuario{
+    margin-left: 15px;
+    line-height: 40px;
+}
+
+a, li.active > a, .pointer{
+    cursor: pointer;
+}
+
+#closeModal{
+    display: none;
+}
+
+.log-option.email span {
+    background: #ffffff;
+    width: 100%;
+    height: auto;
+    border: 2px solid #5a425b;
+    display: inline-block;
+    line-height: normal;
+    border-radius: 40px;
+    top: auto;
+    position: relative;
+    font-size: 16px;
+    padding: 13px 17px;
+    font-weight: 500;
+    transition: all ease 0.4s;
+    cursor: pointer;
+}
+
+.log-option.email span:hover{
+    background-color: #5a425b;
+    color: white;
+}
+
+.log-option {
+    margin: 0px 0 20px 0;
+    border-top: none;
+}
+
+i.fa.fa-envelope-o, i.fa.fa-user-o{
+    padding-right: 10px;
+}
+
+.myRecaptcha > div{
+    width: 100%;
+}
+
+
+::ng-deep{
+    re-captcha div{
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+    }
+}
+

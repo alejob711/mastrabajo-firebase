@@ -1,0 +1,51 @@
+.como-extrabold{
+    font-family: 'Como ExtraBold', sans-serif;
+}
+
+.como-medium{
+    font-family: 'Como Medium', sans-serif;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #5a425b !important;
+    opacity: 1; /* Firefox */
+  }
+
+.texto-violeta{
+    color:#5a425b !important;
+}  
+
+.heading.light p {
+    line-height: 1.8;
+    font-size: 40px;
+}
+
+.heading.light {
+    padding: 0px;
+    text-align: center;
+}
+
+.vos{
+    font-family: 'Como ExtraBold';
+}
+
+h5 a {
+    font-family: 'Como Bold';
+}
+
+.landmarkBannerCol{
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-left: auto;
+    margin-right: auto;
+    float: none;
+}
+
+.descripcionPuesto{
+    text-align: center;
+    line-height: 1.3em;
+}
+.verticalAlignElements{
+    display: flex;
+    flex-wrap: wrap;
+}

@@ -1,0 +1,41 @@
+<!-- ======================= Page Title ===================== -->
+<div class="page-title">
+    <div class="container">
+      <div class="page-caption">
+        <h2>Recuperar Contraseña</h2>
+        <p><a href="#" title="Home">Inicio</a> <i class="ti-angle-double-right"></i> Recuperar Contraseña</p>
+      </div>
+    </div>
+  </div>
+  <!-- ======================= End Page Title ===================== --> 
+  
+  <!-- ================ Profile Settings ======================= -->
+  <section class="padd-top-40 padd-bot-80">
+    <div class="container">
+      <div class="row"> 
+        <h3 class="text-center padd-bot-40">Ingresa tu email para solicitar el reinicio de la contraseña.</h3>
+            <form (ngSubmit)="reiniciarContrsaenia()" [formGroup]="reiniciarContraseniaForm">
+                <div class="form-group">
+                  <input class="form-control"
+                         type="text"
+                         formControlName="email"
+                         placeholder="Email">
+                  <span *ngIf="reiniciarContraseniaForm.get('email')?.hasError('required') && reiniciarContraseniaForm.get('email')?.touched" 
+                         class="form-text text-danger">Este campo es obligatorio</span>
+                  <span *ngIf="(reiniciarContraseniaForm.get('email')?.hasError('email') || reiniciarContraseniaForm.get('email')?.hasError('invalidEmail')) && reiniciarContraseniaForm.get('email')?.touched" 
+                             class="form-text text-danger">El texto ingresado debe ser un email.</span>
+                </div>
+                <re-captcha class="myRecaptcha" 
+                            formControlName="recaptcha"
+                            (resolved)="checkCaptcha($event)"
+                            siteKey="6LdIOv4kAAAAABuxQThE8P664tg2k8hHr5nzsvem">
+                </re-captcha>
+                <div class="form-group text-center padd-top-15">
+                  <button [disabled]="!reiniciarContraseniaForm.valid" type="submit" class="btn theme-btn full-width btn-m">{{buttonText}}</button>
+                </div>
+              </form> 
+              <p *ngIf="verificacionEnviada" class="text-info text-center">Ya hemos enviado la solicitud a tu casilla de correo. Ingresa a tu email para recuperar tu contraseña</p>
+      </div>
+    </div>
+  </section>
+  <!-- ================ End Profile Settings ======================= --> 

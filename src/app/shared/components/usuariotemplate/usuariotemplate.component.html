@@ -1,0 +1,10 @@
+<div id="leftcol_item">
+    <div class="user_dashboard_pic"> <img alt="user photo" src="assets/img/generic-user.jpg"> <span class="user-photo-action">Alejo Bruno</span> </div>
+  </div>
+  <div class="dashboard_nav_item">
+    <ul>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="['/usuarios',  authService.userID ]"><i class="login-icon ti-dashboard"></i> Dashboard</a></li>
+      <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}"><a [routerLink]="['/usuarios',  authService.userID ,'cambiarcontrasenia']"><i class="login-icon ti-key"></i> Cambiar Contraseña</a></li>
+      <li><a (click)="logOut()"><i class="login-icon ti-power-off"></i> Salir</a></li>
+    </ul>
+  </div>

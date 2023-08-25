@@ -1,0 +1,68 @@
+<!-- ======================= Page Title ===================== -->
+<div class="page-title">
+  <div class="container">
+    <div class="page-caption">
+      <h2>Administrar Empresas</h2>
+      <p><a [routerLink]="['/usuarios',  authService.userID]" title="Home">Inicio</a> <i class="ti-angle-double-right"></i> Administrar Empresas</p>
+    </div>
+  </div>
+</div>
+<!-- ======================= End Page Title ===================== -->
+
+<!-- ======================= Manage Resume ======================== -->
+<section class="utf_create_company_area padd-top-30 padd-bot-80">
+  <div class="container">
+    <div class="table-responsive">
+      <div class="col-md-8 col-sm-12 col-xs-12 browse_job_tlt">
+        <h2>Mis Empresas</h2>
+      </div>
+      <div class="col-md-4 col-sm-12 col-xs-12">
+        <a routerLink="crear" data-toggle="modal" data-target="#apply-job"
+          class="btn-job theme-btn job-apply fl-right">Agregar Nueva</a>
+      </div>
+      <!-- <div class="col-md-12">
+        <button (click)="agregar()" class="btn-job theme-btn job-apply">Agregar</button>
+        <button (click)="actualizar()" class="btn-job theme-btn job-apply">actualizar</button>
+        <button (click)="leer()" class="btn-job theme-btn job-apply">leer</button>
+        <button (click)="eliminar()" class="btn-job theme-btn job-apply">eliminar</button>
+      </div> -->
+      <div class="col-xs-12">
+        <table class="table table-lg table-hover">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Direccion</th>
+              <th>Email</th>
+              <th>Telefono</th>
+              <th class="text-center">Accion</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let empresa of todasLasEmpresas | async ">
+              <td><img [src]="empresa.imgLogo" class="avatar avatar-lg">{{empresa.nombre}}</td>
+              <td><i class="ti-location-pin"></i> {{empresa.direccion}}</td>
+              <td><a href="mailto:{{empresa.email}}">{{empresa.email}}</a></td>
+              <td><i class="ti-mobile"></i> {{empresa.telefono}}</td>
+              <td class="text-center"> 
+                <a routerLink="{{empresa.id}}" class="cl-success mrg-5" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-edit"></i></a> 
+                <a (click)="eliminarEmpresa(empresa.id)" class="cl-danger mrg-5" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- PAGINACION -->
+      <!-- <div class="utf_flexbox_area padd-10">
+          <ul class="pagination">
+            <li class="page-item"> <a class="page-link" href="#" aria-label="Previous"> <span aria-hidden="true">«</span> <span class="sr-only">Previous</span> </a> </li>
+            <li class="page-item active"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"> <a class="page-link" href="#" aria-label="Next"> <span aria-hidden="true">»</span> <span class="sr-only">Next</span> </a> </li>
+          </ul>
+        </div> -->
+
+    </div>
+  </div>
+</section>

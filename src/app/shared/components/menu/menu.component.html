@@ -1,0 +1,147 @@
+<!-- ======================= Start Navigation ===================== -->
+<nav class="navbar navbar-default navbar-mobile navbar-fixed white bootsnav">
+    <div class="container"> 
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-menu"> <i class="fa fa-bars"></i> </button>
+        <a class="navbar-brand" href="index.html"> <img src="assets/img/logotipo.png" class="logo logo-display" alt=""> <img src="assets/img/logotipo.png" class="logo logo-scrolled" alt=""> </a> 
+    </div>
+      <div class="collapse navbar-collapse" id="navbar-menu">
+        <ul class="nav navbar-nav navbar-left" data-in="fadeInDown" data-out="fadeOutUp">
+          <li class="dropdown active"> <a href="index.html">Inicio</a> </li>
+          <li class="dropdown"> <a routerLink="trabajos">Busco Trabajo</a></li>
+          <li class="dropdown"> <a href="#" class="dropdown-toggle" data-toggle="dropdown">Soy Empleador</a>
+            <ul class="dropdown-menu animated fadeOutUp">
+              <li><a routerLink="empresas">Mis Empresas</a></li>
+              <li><a routerLink="/trabajos/mistrabajos">Mis Trabajos</a></li>
+            </ul>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li *ngIf="!authService.isLoggedIn" class="br-right"><a class="btn-signup red-btn" href="" data-toggle="modal" data-target="#signin"><i class="login-icon ti-user"></i>Ingresar</a></li>
+          <li *ngIf="authService.isLoggedIn" class="br-right"><a (click)="miCuenta()" class="btn-signup red-btn" data-target="#signin"><i class="login-icon ti-user"></i>Mi Cuenta</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- ======================= End Navigation ===================== --> 
+  
+    <!-- Signup Code -->
+  <div class="modal fade" id="signin" #SingInModal tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" id="myModalLabel1">
+        <div class="modal-body">
+          <h3 class="text-center padd-bot-0">Bienvenido a mastrabajo</h3>
+          <p class="text-center padd-bot-15">El sitio ideal para para encontrar el trabajo que estas buscando!</p>
+          <!-- <a href="#" class="tipoUsuario">Seleccione el tipo de usuario</a> -->
+          <!-- <ul class="nav nav-tabs nav-advance theme-bg" role="tablist">
+            <li class="nav-item"> 
+              <a (click)="setBuscoTrabajo()" class="nav-link" data-toggle="tab" role="tab"> <i class="ti-user"></i> Busco trabajo</a> 
+            </li>
+            <li class="nav-item"> 
+              <a (click)="setContratoPersonal()" class="nav-link" data-toggle="tab" role="tab"><i class="ti-briefcase"></i> Contrato personal</a> 
+            </li>
+          </ul> -->
+          <div class="tab-content">
+            <div class="tab-pane fade in show active" id="employer" role="tabpanel">
+              
+              <!-- INCIAR SESION CON GOOGLE -->
+              <!-- <div class="row">
+                <div class="col-md-12"> 
+                  <a (click)="loginWithGoogle()" title="" class="gplus-log-btn log-btn"><i class="fa fa-google"></i> Iniciar sesion con Google</a> </div>
+              </div> -->
+  
+              <!-- INICIAR SESION -->
+              <div class="log-option email"><span (click)="iniciarSesionEmailOption()"> <i class="fa fa-envelope-o"></i> Iniciar sesion con email</span></div>
+              <form *ngIf="inciarSessionEmail" (ngSubmit)="iniciarSesionEmail()" [formGroup]="iniciarSesionForm" >
+                <div class="form-group">
+                  <input type="text" 
+                         formControlName="email" 
+                         class="form-control" 
+                         placeholder="Email">
+                  <!-- <span *ngIf="iniciarSesionForm.get('email')?.hasError('required') && iniciarSesionForm.controls.email.touched" 
+                         class="form-text text-danger">Este campo es obligatorio</span>
+                  <span *ngIf="(iniciarSesionForm.get('email')?.hasError('email') || iniciarSesionForm.get('email')?.hasError('invalidEmail')) && iniciarSesionForm.controls.email.touched" 
+                             class="form-text text-danger">El texto ingresado debe ser un email.</span> -->
+                </div>
+                <div class="form-group">
+                  <input type="password" 
+                         formControlName="password" 
+                         class="form-control" 
+                         placeholder="Contraseña">
+                  <!-- <span *ngIf="iniciarSesionForm.get('contrasenia')?.hasError('required') && iniciarSesionForm.controls.contrasenia.touched" 
+                         class="form-text text-danger">Este campo es obligatorio</span>
+                  <span *ngIf="iniciarSesionForm.get('password')?.hasError('minlength') && iniciarSesionForm.controls.password.touched" 
+                             class="form-text text-danger">La contraseña debe tener un minimo de 8 caracteres.</span> -->
+                </div>
+                <div class="form-group text-center">
+                  <button [disabled]="!iniciarSesionForm.valid"  type="submit" class="btn theme-btn full-width btn-m">Iniciar Sesion</button>
+                  <span *ngIf="errorCredenciales" class="form-text text-danger">El usuario o la contraseña ingresados son incorrectos.</span>
+                  <span (click)="recuperarContrasenia()" class="form-text text-bg-info pointer">Olvidaste tu contraseña? hace click aca para recuperarla! </span>
+                  <br>
+                  <a routerLink="/administracion" class="form-text text-bg-info pointer">Iniciar como Administrador</a><br>
+                  <a routerLink="/administracionpostulante" class="form-text text-bg-info pointer">Iniciar como Postulante</a>
+                </div>
+              </form>
+              
+              <!-- CREAR NUEVA CUENTA FORM -->
+              <div (click)="crearNuevaCuentaOption()" class="log-option email"><span> <i class="fa fa-user-o"></i> Crear una cuenta nueva</span></div>
+              <form  (ngSubmit)="crearNuevaCuenta()" [formGroup]="crearCuentaForm" *ngIf="crearCuentaNueva">
+                <p>Tipo de Cuenta</p>
+                <div class="form-group">
+                  <select class="wide form-control"
+                    formControlName="tipoUsuario">
+                    <option value="BT">Busco Trabajo</option>
+                    <option value="CP">Contrato Personal</option>
+                  </select>
+                  <span *ngIf="crearCuentaForm.get('tipoUsuario')?.hasError('required') && crearCuentaForm.controls['tipoUsuario'].touched" 
+                          class="form-text text-danger">Este campo es obligatorio</span>
+                </div>
+                <div class="form-group">
+                  <input class="form-control"
+                         type="text"
+                         formControlName="email"
+                         placeholder="Email">
+                  <span *ngIf="crearCuentaForm.get('email')?.hasError('required') && crearCuentaForm.controls['email'].touched" 
+                         class="form-text text-danger">Este campo es obligatorio</span>
+                  <span *ngIf="(crearCuentaForm.get('email')?.hasError('email') || crearCuentaForm.get('email')?.hasError('invalidEmail')) && crearCuentaForm.controls['email'].touched" 
+                             class="form-text text-danger">El texto ingresado debe ser un email.</span>
+                </div>
+                <div class="form-group">
+                  <input type="password" 
+                         formControlName="password" 
+                         class="form-control" 
+                         placeholder="Contraseña">
+                  <span *ngIf="crearCuentaForm.get('password')?.hasError('required') && crearCuentaForm.controls['password'].touched" 
+                         class="form-text text-danger">Este campo es obligatorio</span>
+                  <span *ngIf="crearCuentaForm.get('password')?.hasError('minlength') && crearCuentaForm.controls['password'].touched" 
+                             class="form-text text-danger">La contraseña debe tener un minimo de 8 caracteres.</span>
+                </div>
+                <re-captcha class="myRecaptcha" 
+                            formControlName="recaptcha"
+                            (resolved)="checkCaptcha($event)"
+                            siteKey="6LdIOv4kAAAAABuxQThE8P664tg2k8hHr5nzsvem">
+                </re-captcha>
+                <div class="form-group text-center">
+                  <button [disabled]="!crearCuentaForm.valid" type="submit" class="btn theme-btn full-width btn-m">Registrarme</button>
+                  <span *ngIf="errorUsuarioExistente" class="form-text text-danger">Ya existe un usuario con ese email.</span>
+                </div>
+              </form>
+              <!-- boton oculto mediante css -->
+              <button #closeModal type="button" id="closeModal" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- <div class="row">
+      <div class="col-12">
+          <h3>Form</h3>
+          <pre>Forrmulario Valido: {{iniciarSesionForm.valid}}</pre>
+          <pre>{{iniciarSesionForm.value | json}}</pre>
+          <pre>{{iniciarSesionForm.controls.password.errors| json}}</pre>
+      </div>
+    </div> -->
+    
+  </div>
+  
