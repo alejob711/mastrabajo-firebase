@@ -21,7 +21,7 @@
         <div class="col-md-4 col-sm-12 col-xs-12">
             <a routerLink="crear" data-toggle="modal" data-target="#apply-job" class="btn-job theme-btn job-apply fl-right">Agregar Nuevo</a>
         </div>
-        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div>
           <table class="table table-lg table-hover">
             <thead>
               <tr>
@@ -50,7 +50,10 @@
                       <span *ngIf="trabajo.postulantes">{{trabajo.postulantes.length}}</span>
                     </a>
                   </td>
-                  <td><a href="/trabajos/idtrabajo" class="cl-success mrg-5" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-edit"></i></a> <a href="#" class="cl-danger mrg-5" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></a></td>
+                  <td>
+                    <a routerLink="{{trabajo.id}}" class="cl-success mrg-5" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-edit"></i></a> 
+                    <a href="#" class="cl-danger mrg-5" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></a>
+                  </td>
                 </tr>
             </tbody>
           </table>

@@ -1,5 +1,4 @@
-import { DOCUMENT } from '@angular/common';
-import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Empresa } from 'src/app/empresa/interfaces/empresa.interface';
 import { EmpresaFirestoreService } from '../../../empresa/services/empresa-firestore.service';
@@ -12,9 +11,8 @@ import { Categoria } from 'src/app/categorias/interfaces/categoria';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../usuarios/services/auth.service';
 import { TrabajoFirestoreService } from '../../services/trabajo-firestore.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Trabajo } from '../../interfaces/trabajo.interface';
-import  * as moment  from 'moment';
 
 @Component({
   selector: 'app-creartrabajo',
@@ -25,6 +23,7 @@ export class CreartrabajoComponent implements OnInit {
 
   indicarHorarios : boolean = false;
   indicarRemuneracion : boolean = false;
+  cantHorariosIndicados : number = 0;
   horarioCortado : boolean = false;
   horario2 : boolean = false;
   horario3 : boolean = false;
@@ -32,32 +31,39 @@ export class CreartrabajoComponent implements OnInit {
   botonEliminarVisible : boolean = false;
   diasLaborales : any = [
     {
-      nombre: 'Lunes',
-      value : 1
+      "nombre": 'Lunes',
+      "value" : 1,
+      "selected": false
     },
     {
-      nombre: 'Martes',
-      value : 2
+      "nombre": 'Martes',
+      "value" : 2,
+      "selected": false
     },
     {
-      nombre: 'Miercoles',
-      value : 3
+      "nombre": 'Miercoles',
+      "value" : 3,
+      "selected": false
     },
     {
-      nombre: 'Jueves',
-      value : 4
+      "nombre": 'Jueves',
+      "value" : 4,
+      "selected": false
     },
     {
-      nombre: 'Viernes',
-      value : 5
+      "nombre": 'Viernes',
+      "value" : 5,
+      "selected": false
     },
     {
-      nombre: 'Sabado',
-      value : 6
+      "nombre": 'Sabado',
+      "value" : 6,
+      "selected": false
     },
     {
-      nombre: 'Domingo',
-      value : 7
+      "nombre": 'Domingo',
+      "value" : 7,
+      "selected": false
     }
   ]
 
@@ -67,6 +73,7 @@ export class CreartrabajoComponent implements OnInit {
   todasLasAreaTrabajo : Observable<Categoria[]>;
 
   nuevoTrabajo : Trabajo;
+  trabajo:Trabajo;
 
   public trabajoForm : FormGroup = this.fb.group({
     empresaId : [ , [Validators.required]],
@@ -77,19 +84,19 @@ export class CreartrabajoComponent implements OnInit {
     areaTrabajoId : [ , [Validators.required]],
     descripcionPuesto : [ , [Validators.required]],
     tipoHorario : [ , [Validators.required]],
-    diasLaborales1: this.fb.array([]),
+    diasLaborales1: this.buildDiasLaborales(),
     horarioTrabajo1 : [ , []],
     horario1desde : [ ],
     horario1hasta : [ ],
     horario1desdecortado : [ , []],
     horario1hastacortado : [ , []],
-    diasLaborales2: this.fb.array([]),
+    diasLaborales2: this.buildDiasLaborales(),
     horarioTrabajo2 : [ , []],
     horario2desde : [ ],
     horario2hasta : [ ],
     horario2desdecortado : [ , []],
     horario2hastacortado : [ , []],
-    diasLaborales3: this.fb.array([]),
+    diasLaborales3: this.buildDiasLaborales(),
     horarioTrabajo3 : [ , []],
     horario3desde : [ ],
     horario3hasta : [ ],
@@ -116,16 +123,29 @@ export class CreartrabajoComponent implements OnInit {
     types: ['(cities)'],
   }
 
-  constructor(private renderer: Renderer2,
-              @Inject(DOCUMENT) private _document : any,
-              private empresasFirestore : EmpresaFirestoreService,
+  estadoPantalla:string = 'Crear'
+
+  constructor(private empresasFirestore : EmpresaFirestoreService,
               private tipotrabajoFirestore : TipotrabajoFirestoreService,
               private categoriaFirestore : CategoriaFirestoreService,
               private fb : FormBuilder,
               private mapsAPILoader: MapsAPILoader,
               public authService : AuthService,
               private trabajoFirestoreService : TrabajoFirestoreService,
-              private router: Router) { }
+              private router: Router,
+              private activatedRoute: ActivatedRoute) { }
+
+  get diasLaborales1() {
+    return this.trabajoForm.get('diasLaborales1') as FormArray;
+  }
+  
+  get diasLaborales2() {
+    return this.trabajoForm.get('diasLaborales2') as FormArray;
+  }
+  
+  get diasLaborales3() {
+    return this.trabajoForm.get('diasLaborales3') as FormArray;
+  }
 
   ngOnInit(): void {
     
@@ -134,28 +154,121 @@ export class CreartrabajoComponent implements OnInit {
       this.isApiLoaded = true
     })
 
-    // this.todasLasEmpresas = this.empresasFirestore.getAll(this.authService.userID);
-
     this.empresasFirestore.getAll(this.authService.userID).subscribe(res=>{
       this.todasLasEmpresas = res;
     });
 
-
     this.todosLosTipoTrabajo = this.tipotrabajoFirestore.getAll();
     this.todasLasAreaTrabajo = this.categoriaFirestore.getAll();
+
+    const idTrabajo = this.activatedRoute.snapshot.paramMap.get('trabajoId');
+
+    if (idTrabajo != null){
+
+      this.estadoPantalla = 'Actualizar';
+
+      this.trabajoFirestoreService.get(idTrabajo).subscribe((trabajo : any) =>{
+
+        this.trabajo = trabajo;
+
+        let diasLaborales1Array = trabajo['diasLaborales1'].map((x:any) => {
+          return this.fb.control(
+            {
+              nombre : x.nombre, 
+              value : x.value, 
+              selected : x.selected
+            }
+          );
+        });
+
+        let diasLaborales2Array = trabajo['diasLaborales2'].map((x:any) => {
+          if (x.selected) { 
+            this.horario2 = true;
+            this.botonEliminarVisible = true;
+          }
+          return this.fb.control(
+            {
+              nombre : x.nombre, 
+              value : x.value, 
+              selected : x.selected
+            }
+          );
+        });
+        
+        let diasLaborales3Array = trabajo['diasLaborales3'].map((x:any) => {
+          if (x.selected) { 
+            this.horario3 = true;
+            this.botonVisible = false;
+            this.botonEliminarVisible = true;
+          }
+          return this.fb.control(
+            {
+              nombre : x.nombre, 
+              value : x.value, 
+              selected : x.selected
+            }
+          );
+        });
+
+        this.trabajoForm = this.fb.group({
+          empresaId : [ trabajo['empresaId'] , [Validators.required]],
+          puestoTrabajo : [ trabajo['puestoTrabajo'], [Validators.required]],
+          ciudad : [ trabajo['ciudad'], [Validators.required]],
+          provincia : [ trabajo['provincia'], [Validators.required]],
+          tipoTrabajoId : [ trabajo['tipoTrabajoId'], [Validators.required]],
+          areaTrabajoId : [ trabajo['areaTrabajoId'], [Validators.required]],
+          descripcionPuesto : [ trabajo['descripcionPuesto'], [Validators.required]],
+          tipoHorario : [ trabajo['tipoHorario'], [Validators.required]],
+          diasLaborales1: this.fb.array(diasLaborales1Array),
+          horarioTrabajo1 : [ trabajo['horarioTrabajo1'], []],
+          horario1desde : [ trabajo['horario1desde']],
+          horario1hasta : [ trabajo['horario1hasta']],
+          horario1desdecortado : [ trabajo['horario1desdecortado'], []],
+          horario1hastacortado : [ trabajo['horario1hastacortado'], []],
+          diasLaborales2: this.fb.array(diasLaborales2Array),
+          horarioTrabajo2 : [ trabajo['horarioTrabajo2'], []],
+          horario2desde : [ trabajo['horario2desde']],
+          horario2hasta : [ trabajo['horario2hasta']],
+          horario2desdecortado : [ trabajo['horario2desdecortado'], []],
+          horario2hastacortado : [ trabajo['horario2hastacortado'], []],
+          diasLaborales3: this.fb.array(diasLaborales3Array),
+          horarioTrabajo3 : [ trabajo['horarioTrabajo3'], []],
+          horario3desde : [ trabajo['horario3desde']],
+          horario3hasta : [ trabajo['horario3hasta']],
+          horario3desdecortado : [ trabajo['horario3desdecortado'], []],
+          horario3hastacortado : [ trabajo['horario3hastacortado'], []],
+          remuneracionOfrecida : [ trabajo['remuneracionOfrecida'], [Validators.required]],
+          tipoRemuneracion : [ trabajo['tipoRemuneracion'], []],
+          remuneracionMinima : [ trabajo['remuneracionMinima'], []],
+          remuneracionMaxima : [ trabajo['remuneracionMaxima'], []],
+          genero : [ trabajo['genero'], [Validators.required]],
+          edadMinima: [ trabajo['edadMinima'], [Validators.required]],
+          edadMaxima: [ trabajo['edadMaxima'], ],
+          nivelEstudioMinimo: [ trabajo['nivelEstudioMinimo'], [Validators.required]],
+          estadoEstudios: [ trabajo['estadoEstudios'], [Validators.required]],
+          areasEstudio: [ trabajo['areasEstudio']],
+          experienciasLaboralesPrevias: [ trabajo['experienciasLaboralesPrevias'], [Validators.required]],
+          noEspecificarEmpresa : [trabajo['noEspecificarEmpresa']],
+          alternativaNombre : [ trabajo['alternativaNombre'], Validators.maxLength(25)]
+        }); 
+
+      });
+
+    }
+
   }
 
-  ngAfterViewInit(){
-    // var s = this.renderer.createElement("script");
-    // s.type = "text/javascript";
-    // s.src = "assets/plugins/nice-select/js/jquery.nice-select.min.js";
-    // this.renderer.appendChild(this._document.body, s);
-
-    // var s2 = this.renderer.createElement("script");
-    // s2.type = "text/javascript";
-    // s2.src = "assets/js/custom.js";
-    // this.renderer.appendChild(this._document.body, s2);
-
+  buildDiasLaborales(){
+    const arr = this.diasLaborales.map((dl:any) => {
+      return this.fb.control(
+        {
+          nombre : dl.nombre, 
+          value : dl.value, 
+          selected : dl.selected
+        }
+      );
+    });
+    return this.fb.array(arr);
   }
 
   addHorario(){
@@ -174,28 +287,15 @@ export class CreartrabajoComponent implements OnInit {
     if (this.horario2 && !this.horario3) {
       this.horario2 = false
       this.botonEliminarVisible = false
+      console.log('REINICIAR HORARIOS 2');
     }else{
       if(this.horario3){
         this.horario3 = false;
+        this.botonVisible = true;
+        console.log('REINICIAR HORARIOS 3');
       }
     }
   }
-
-  // validarTipoHorario(){
-  //   if (this.trabajoForm.controls['tipoHorario'].value===2){
-  //     this.indicarHorarios = true;
-  //   }else{
-  //     this.indicarHorarios = false;
-  //   }
-  // }
-
-  // validarHorarioTrabajo(){
-  //   if (this.trabajoForm.controls['horarioTrabajo1'].value===2){
-  //     this.horarioCortado = true;
-  //   }else{
-  //     this.horarioCortado = false;
-  //   }
-  // }
   
   validarRemuneracionOfrecida(){
     if (this.trabajoForm.controls['remuneracionOfrecida'].value===1){
@@ -207,7 +307,11 @@ export class CreartrabajoComponent implements OnInit {
 
   submitTrabajoData(){
     if (this.trabajoForm.valid) {
-      this.storeData();
+      if (this.trabajo){
+        this.updateData()
+      }else{
+        this.storeData();
+      }
     } else {
       this.validateAllFormFields(this.trabajoForm); //{7}
     }
@@ -215,6 +319,45 @@ export class CreartrabajoComponent implements OnInit {
 
   crearInformacion(num1 : any ,num2 : any){
     return num1 + num2;
+  }
+
+  async updateData(){
+
+    Swal.fire('Actualizando trabajo...')
+    Swal.showLoading() 
+
+    this.nuevoTrabajo = {... this.trabajoForm.value};
+
+    this.nuevoTrabajo.id = this.trabajo.id;
+
+    let empresaSeleccionada = await this.todasLasEmpresas.filter((emp) => emp.id == this.nuevoTrabajo.empresaId);
+
+      this.nuevoTrabajo.empresaNombre = empresaSeleccionada[0].nombre;
+
+      this.nuevoTrabajo.idUsuario = this.authService.userID;
+      this.nuevoTrabajo.fechaCreacion = new Date();
+      this.nuevoTrabajo.fechaVencimiento = new Date();
+      this.nuevoTrabajo.fechaVencimiento.setDate(this.nuevoTrabajo.fechaVencimiento.getDate()+15)
+  
+      this.nuevoTrabajo.descripcionPuesto.replace("\n", "<br>");
+      this.nuevoTrabajo.areasEstudio?.replace("\n", "<br>");
+      this.nuevoTrabajo.experienciasLaboralesPrevias.replace("\n", "<br>");
+
+      console.log(this.nuevoTrabajo);
+
+    this.trabajoFirestoreService.update(this.nuevoTrabajo).then(res=>{
+      Swal.fire({
+        title: 'La empresa fue actualizada de manera exitosa',
+        icon: 'success',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#5a435c',
+        timer: 2000,
+        showConfirmButton: false
+      }).then(()=>{
+        this.router.navigate([`usuarios/${this.authService.userID}/trabajos`]);
+      });
+    })
+
   }
 
   async storeData(){
@@ -280,28 +423,30 @@ export class CreartrabajoComponent implements OnInit {
   onCheckChange(event : any, field:string){
 
     const diasLaborales: FormArray = this.trabajoForm.get(field) as FormArray;
-
     /* Selected */
+
     if(event.target.checked){
-      // Add a new control in the arrayForm
-      diasLaborales.push(new FormControl(event.target.value));
+      diasLaborales.value[event.target.value - 1].selected = true;
+    }else{
+      diasLaborales.value[event.target.value - 1].selected = false;
     }
-    /* unselected */
-    else{
-      // find the unselected element
-      let i: number = 0;
-
-      diasLaborales.controls.forEach((ctrl: any) => {
-        if (ctrl.value == event.target.value) {
-          // Remove the unselected element from the arrayForm
-          diasLaborales.removeAt(i);
-          return;
-        }
-
-        i++;
-      });
+    
   }
 
+  limpiarHorarios(){
+    
+    console.log(this.trabajoForm.controls["diasLaborales2"]);
+    if (this.trabajoForm.get('tipoHorario')?.value === 1){
+      console.log('limpiar horario');
+      this.trabajoForm.controls["diasLaborales1"].setValue(this.diasLaborales);
+      this.trabajoForm.controls["diasLaborales2"].setValue(this.diasLaborales);
+      this.trabajoForm.controls["diasLaborales3"].setValue(this.diasLaborales);
+
+      console.log(this.trabajoForm);
+    }
+    
+
+    
   }
 
 }

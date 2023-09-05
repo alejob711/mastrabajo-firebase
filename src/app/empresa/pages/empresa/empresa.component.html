@@ -27,6 +27,7 @@
               <span *ngIf="empresaForm.get('nombre')?.hasError('required') && empresaForm.controls['nombre'].touched"
                 class="form-text text-danger">Este campo es obligatorio</span>
             </div>
+            <!-- SI NO HAY EMPRESA USO UNA ESTRUCTURA DE COLUMNAS DIFERENTE Y ADEMAS NO VISUALIZO LA IMAGEN CARGADA -->
             <span *ngIf="!empresa; else estructuraActualizarEmpresa">
               <div class="col-md-4 col-sm-6 col-xs-12">
                 <label>Rubro *</label>
@@ -38,12 +39,16 @@
                   class="form-text text-danger">Este campo es obligatorio</span>
               </div>
               <div class="col-md-4 col-sm-6 col-xs-12">
-                <label>Logo Empresarial <span *ngIf="empresa"> Actual </span> </label>
+                <label>Logo Empresarial *</label>
                 <div class="custom-file-upload">
-                  <input (change)="crearArchivo($event)" type="file" id="file" name="myfiles" accept="image/png, image/gif, image/jpeg" style="cursor: pointer;" />
+                  <input (change)="crearArchivo($event)" formControlName="logo" type="file" id="file" name="myfiles" accept="image/png, image/gif, image/jpeg" style="cursor: pointer;" required/>
                 </div>
+                <span
+                  *ngIf="empresaForm.get('logo')?.hasError('required') && empresaForm.controls['logo'].touched"
+                  class="form-text text-danger">Este campo es obligatorio</span>
               </div>
             </span>
+            <!-- SI HAY EMPRESA CARGADA REDUZCO EL ANCHO DE ALGUNAS COLUMNAS Y VISUALIZO LA IMAGEN CARGADA -->
             <ng-template #estructuraActualizarEmpresa>
               <div class="col-md-3 col-sm-6 col-xs-12">
                 <label>Rubro *</label>
@@ -54,14 +59,15 @@
                   *ngIf="empresaForm.get('rubro')?.hasError('required') && empresaForm.controls['rubro'].touched"
                   class="form-text text-danger">Este campo es obligatorio</span>
               </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <label>Logo Empresarial</label>
+              <div class="col-md-2 col-sm-6 col-xs-12 padd-0">
+                <label>Logo Actual</label>
+                <img [src]="empresa.imgLogo" class="avatar avatar-lg imgLogoActual">
+              </div>
+              <div class="col-md-3 col-sm-6 col-xs-12">
+                <label>Modificar Logo Empresarial</label>
                 <div class="custom-file-upload">
                   <input (change)="crearArchivo($event)" type="file" id="file" name="myfiles" accept="image/png, image/gif, image/jpeg" style="cursor: pointer;" />
                 </div>
-              </div>
-              <div class="col-md-1 col-sm-6 col-xs-12 padd-0">
-                <img [src]="empresa.imgLogo" class="avatar avatar-lg imgLogoActual">
               </div>
             </ng-template>
           </div>

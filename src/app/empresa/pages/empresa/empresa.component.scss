@@ -1,5 +1,6 @@
 .custom-file-upload {
     box-sizing: revert;
+    height: 48px;
 }
 
 .aclaracionResumenEmpresa{
@@ -7,7 +8,8 @@
 }
 
 .avatar-lg {
-    width: 70px;
-    height: 70px;
-    margin-top: 20px;
+    width: 100%;
+    height: 50px;
+    border: 2px solid #dde6ef;
+    border-radius: 5px;
 }

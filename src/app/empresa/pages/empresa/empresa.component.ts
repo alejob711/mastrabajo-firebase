@@ -1,22 +1,16 @@
 import { DOCUMENT, NgIf } from '@angular/common';
 import { Component, Inject, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { Categoria } from 'src/app/categorias/interfaces/categoria';
-import { CategoriaFirestoreService } from 'src/app/categorias/services/categoria-firestore.service';
 import { Location } from '@angular/common';
 import { MapsAPILoader } from '@agm/core';
-import { Address } from 'ngx-google-places-autocomplete/objects/address';
 import { Empresa } from '../../interfaces/empresa.interface';
 import { EmpresaFirestoreService } from '../../services/empresa-firestore.service';
 import { Storage, StorageReference, UploadResult, ref, uploadBytes } from '@angular/fire/storage';
 import { getDownloadURL, list, listAll } from 'firebase/storage';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
-import { RubroEmpresa } from '../../../rubroempresa/interfaces/rubroempresa';
 import { RubroempresaFirestoreService } from 'src/app/rubroempresa/services/rubroempresa-firestore.service';
 import { AuthService } from '../../../usuarios/services/auth.service';
-import { UsuarioFirestoreService } from '../../../usuarios/services/usuario-firestore.service';
 
 @Component({
   selector: 'app-empresa',
@@ -31,6 +25,7 @@ export class EmpresaComponent implements OnInit {
   public empresaForm : FormGroup = this.fb.group({
     nombre : [ , [Validators.required, Validators.minLength(2)]],
     rubro : [ , [Validators.required]],
+    logo : [ , [Validators.required]],
     email : [ , [Validators.required, Validators.email, this.emailValidator]],
     telefono : [ , [Validators.required]],
     paginaWeb : [ ],
@@ -53,9 +48,7 @@ export class EmpresaComponent implements OnInit {
   estadoPantalla : string = 'Crear';
   btnVolver : string = '< Volver'
 
-  constructor(private renderer: Renderer2,
-              private fb : FormBuilder,
-              @Inject(DOCUMENT) private _document : any,
+  constructor(private fb : FormBuilder,
               private location:Location,
               private mapsAPILoader: MapsAPILoader,
               private empresaFirestore : EmpresaFirestoreService,
@@ -83,6 +76,8 @@ export class EmpresaComponent implements OnInit {
       this.empresaFirestore.get(idEmpresa).subscribe((empresa : any) =>{
 
         this.empresa = empresa;
+
+        console.log(empresa.logo);
 
         this.empresaForm = this.fb.group({
           nombre : [ empresa.nombre , [Validators.required, Validators.minLength(2)]],

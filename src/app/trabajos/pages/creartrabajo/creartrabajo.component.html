@@ -2,7 +2,7 @@
 <div class="page-title">
     <div class="container">
       <div class="page-caption">
-        <h2>Crear Trabajo</h2>
+        <h2>{{estadoPantalla}} Trabajo</h2>
         <p><a [routerLink]="['/usuarios',  authService.userID]" title="Home">Inicio</a> <i class="ti-angle-double-right"></i> Crear Trabajo</p>
       </div>
     </div>
@@ -40,7 +40,7 @@
                         </div>
                         <div *ngIf="trabajoForm.get('noEspecificarEmpresa')?.value" class="col-md-12 col-sm-12 col-xs-12">
                             <label>Nombre Alternativo * (Se visualizará en el anuncio reemplazando el nombre de la empresa)</label>
-                            <input type="text" formControlName="alternativaNombre" class="form-control" placeholder="Puesto de Trabajo" required>
+                            <input type="text" formControlName="alternativaNombre" class="form-control" placeholder="Nombre Alternativo" required>
                         </div>
                     </div>
                 </div>
@@ -116,7 +116,7 @@
                             <div class="col-md-12 col-sm-6 col-xs-12">
                                 <label>Horarios</label>
                                 <!-- <select class="wide form-control" formControlName="tipoHorario" (ngModelChange)="validarTipoHorario()"> -->
-                                <select class="wide form-control" formControlName="tipoHorario">
+                                <select class="wide form-control" formControlName="tipoHorario" (change)="limpiarHorarios()">
                                     <option [ngValue]="1">Horarios Flexibles</option>
                                     <option [ngValue]="2">Indicar Horarios </option>
                                 </select>
@@ -131,17 +131,15 @@
                                     <div class="">
                                     <label>Dias Laborales</label>
                                     </div>
-                                    <div class="">
                                     <div class="side-list no-border">
                                         <ul>
-                                            <li *ngFor="let item of diasLaborales"> 
+                                            <li *ngFor="let dl of diasLaborales1.controls; let j=index"> 
                                                 <span class="custom-checkbox">
-                                                <input type="checkbox"  [value]="item.value" (change)="onCheckChange($event, 'diasLaborales1')">
-                                                <label >{{item.nombre}}</label>
+                                                    <input type="checkbox" [value]="dl.value.value" [checked]="dl.value.selected" (change)="onCheckChange($event, 'diasLaborales1')">
+                                                    <label >{{diasLaborales[j].nombre}}</label>
                                                 </span>
                                             </li>
-                                        </ul>
-                                    </div>
+                                        </ul>                                        
                                     </div>
                                 </div>
                             </div>
@@ -180,7 +178,7 @@
                         </div>
                     </div>  
                     <!-- HORARIOS 2 -->
-                    <div *ngIf="horario2" class="row padd-top-30 horarioExtra">
+                    <div *ngIf="horario2 && trabajoForm.get('tipoHorario')?.value === 2" class="row padd-top-30 horarioExtra">
                         <div class="row">
                             <div class="col-md-4 col-sm-6 col-xs-12">
                                 <div class=" padd-bot-0">
@@ -189,10 +187,10 @@
                                     </div>  
                                     <div class="side-list no-border">
                                         <ul>
-                                            <li *ngFor="let item of diasLaborales"> 
+                                            <li *ngFor="let dl of diasLaborales2.controls; let j=index"> 
                                                 <span class="custom-checkbox">
-                                                    <input type="checkbox"  [value]="item.value" (change)="onCheckChange($event, 'diasLaborales2')">
-                                                    <label >{{item.nombre}}</label>
+                                                    <input type="checkbox" [value]="dl.value.value" [checked]="dl.value.selected" (change)="onCheckChange($event, 'diasLaborales2')">
+                                                    <label >{{diasLaborales[j].nombre}}</label>
                                                 </span>
                                             </li>
                                         </ul>
@@ -233,7 +231,7 @@
                         </div>
                     </div>  
                     <!-- HORARIOS 3 -->
-                    <div *ngIf="horario3" class="row padd-top-30 horarioExtra">
+                    <div *ngIf="horario3 && trabajoForm.get('tipoHorario')?.value === 2" class="row padd-top-30 horarioExtra">
                         <div class="row">
                             <div class="col-md-4 col-sm-6 col-xs-12">
                                 <div class=" padd-bot-0">
@@ -242,10 +240,10 @@
                                     </div>  
                                     <div class="side-list no-border">
                                         <ul>
-                                            <li *ngFor="let item of diasLaborales"> 
+                                            <li *ngFor="let dl of diasLaborales3.controls; let j=index"> 
                                                 <span class="custom-checkbox">
-                                                    <input type="checkbox"  [value]="item.value" (change)="onCheckChange($event, 'diasLaborales3')">
-                                                    <label >{{item.nombre}}</label>
+                                                    <input type="checkbox" [value]="dl.value.value" [checked]="dl.value.selected" (change)="onCheckChange($event, 'diasLaborales3')">
+                                                    <label >{{diasLaborales[j].nombre}}</label>
                                                 </span>
                                             </li>
                                         </ul>
@@ -286,7 +284,7 @@
                         </div>
                     </div>  
                     <div class="row text-center" *ngIf="trabajoForm.get('tipoHorario')?.value === 2">
-                        <a *ngIf="botonVisible" (click)="addHorario()" class="btn btn-m theme-btn text-center">Agregar Otro</a>
+                        <a *ngIf="botonVisible" (click)="addHorario()" class="btn btn-m theme-btn text-center mrg-r-10">Agregar Otro</a>
                         <a *ngIf="botonEliminarVisible" (click)="eliminarHorario()" class="btn btn-m theme-btn text-center">Eliminar</a>
                     </div>
                 </div>

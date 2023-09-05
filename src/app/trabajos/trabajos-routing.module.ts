@@ -15,6 +15,10 @@ const routes: Routes = [
       {
         path: 'crear',
         component : CreartrabajoComponent
+      },
+      {
+        path: ':trabajoId',
+        component : CreartrabajoComponent
       }
     ]
   }
