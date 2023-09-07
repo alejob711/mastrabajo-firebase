@@ -17,3 +17,19 @@
 .table .job-type {
     padding: 5px 10px;
 }
+
+a.cl-danger.mrg-5{
+    cursor: pointer;
+}
+
+
+::ng-deep{
+    div:where(.swal2-container) button:where(.swal2-styled).swal2-confirm {
+        border: 0;
+        border-radius: 0.25em;
+        background: initial;
+        background-color:  #5a425b !important;
+        color: #fff;
+        font-size: 1em;
+    }
+}

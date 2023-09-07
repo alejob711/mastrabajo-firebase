@@ -31,6 +31,13 @@ export class TrabajoFirestoreService {
     }
     
   }
+  
+  getTrabajosImpagos(idUsuario: string) {
+    const refq = query(this.trabajoCollection,where('pagado','==',false),where('idUsuario','==',idUsuario));
+    return collectionData(refq, {
+      idField: 'id',
+    }) as Observable<Trabajo[]>;
+  }
 
   get(id: string) {
     const trabajoDocumentReference = doc(this.firestore, `trabajos/${id}`);

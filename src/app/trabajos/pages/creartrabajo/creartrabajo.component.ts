@@ -171,6 +171,8 @@ export class CreartrabajoComponent implements OnInit {
 
         this.trabajo = trabajo;
 
+        console.log(this.trabajo);
+
         let diasLaborales1Array = trabajo['diasLaborales1'].map((x:any) => {
           return this.fb.control(
             {
@@ -302,6 +304,9 @@ export class CreartrabajoComponent implements OnInit {
       this.indicarRemuneracion = true;
     }else{
       this.indicarRemuneracion = false;
+      this.trabajoForm.controls["tipoRemuneracion"].setValue(null);
+      this.trabajoForm.controls["remuneracionMinima"].setValue(null);
+      this.trabajoForm.controls["remuneracionMaxima"].setValue(null);
     }
   }
 
@@ -332,22 +337,15 @@ export class CreartrabajoComponent implements OnInit {
 
     let empresaSeleccionada = await this.todasLasEmpresas.filter((emp) => emp.id == this.nuevoTrabajo.empresaId);
 
-      this.nuevoTrabajo.empresaNombre = empresaSeleccionada[0].nombre;
+    this.nuevoTrabajo.empresaNombre = empresaSeleccionada[0].nombre;
 
-      this.nuevoTrabajo.idUsuario = this.authService.userID;
-      this.nuevoTrabajo.fechaCreacion = new Date();
-      this.nuevoTrabajo.fechaVencimiento = new Date();
-      this.nuevoTrabajo.fechaVencimiento.setDate(this.nuevoTrabajo.fechaVencimiento.getDate()+15)
-  
-      this.nuevoTrabajo.descripcionPuesto.replace("\n", "<br>");
-      this.nuevoTrabajo.areasEstudio?.replace("\n", "<br>");
-      this.nuevoTrabajo.experienciasLaboralesPrevias.replace("\n", "<br>");
-
-      console.log(this.nuevoTrabajo);
+    this.nuevoTrabajo.descripcionPuesto.replace("\n", "<br>");
+    this.nuevoTrabajo.areasEstudio?.replace("\n", "<br>");
+    this.nuevoTrabajo.experienciasLaboralesPrevias.replace("\n", "<br>");
 
     this.trabajoFirestoreService.update(this.nuevoTrabajo).then(res=>{
       Swal.fire({
-        title: 'La empresa fue actualizada de manera exitosa',
+        title: 'El trabajo fue actualizado de manera exitosa',
         icon: 'success',
         confirmButtonText: 'OK',
         confirmButtonColor: '#5a435c',
@@ -366,6 +364,8 @@ export class CreartrabajoComponent implements OnInit {
     Swal.showLoading() 
 
       this.nuevoTrabajo = {... this.trabajoForm.value};
+
+      console.log(this.nuevoTrabajo)
       
       let empresaSeleccionada = await this.todasLasEmpresas.filter((emp) => emp.id == this.nuevoTrabajo.empresaId);
 
@@ -375,6 +375,7 @@ export class CreartrabajoComponent implements OnInit {
       this.nuevoTrabajo.fechaCreacion = new Date();
       this.nuevoTrabajo.fechaVencimiento = new Date();
       this.nuevoTrabajo.fechaVencimiento.setDate(this.nuevoTrabajo.fechaVencimiento.getDate()+15)
+      this.nuevoTrabajo.pagado = false;
   
       this.nuevoTrabajo.descripcionPuesto.replace("\n", "<br>");
       this.nuevoTrabajo.areasEstudio?.replace("\n", "<br>");
@@ -385,7 +386,7 @@ export class CreartrabajoComponent implements OnInit {
       this.trabajoFirestoreService.create(this.nuevoTrabajo).then((res)=>{
 
         Swal.fire({
-          title: 'El nuevo trabajo fue creado de manera exitosa',
+          title: 'El trabajo fue creado de manera exitosa',
           icon: 'success',
           confirmButtonText: 'OK',
           confirmButtonColor: '#5a435c',
@@ -435,14 +436,21 @@ export class CreartrabajoComponent implements OnInit {
 
   limpiarHorarios(){
     
-    console.log(this.trabajoForm.controls["diasLaborales2"]);
     if (this.trabajoForm.get('tipoHorario')?.value === 1){
-      console.log('limpiar horario');
       this.trabajoForm.controls["diasLaborales1"].setValue(this.diasLaborales);
-      this.trabajoForm.controls["diasLaborales2"].setValue(this.diasLaborales);
-      this.trabajoForm.controls["diasLaborales3"].setValue(this.diasLaborales);
+      this.trabajoForm.controls["horarioTrabajo1"].setValue(null);
+      this.trabajoForm.controls["horario1desde"].setValue(null);
+      this.trabajoForm.controls["horario1hasta"].setValue(null);
 
-      console.log(this.trabajoForm);
+      this.trabajoForm.controls["diasLaborales2"].setValue(this.diasLaborales);
+      this.trabajoForm.controls["horarioTrabajo2"].setValue(null);
+      this.trabajoForm.controls["horario2desde"].setValue(null);
+      this.trabajoForm.controls["horario2hasta"].setValue(null);
+
+      this.trabajoForm.controls["diasLaborales3"].setValue(this.diasLaborales);
+      this.trabajoForm.controls["horarioTrabajo3"].setValue(null);
+      this.trabajoForm.controls["horario3desde"].setValue(null);
+      this.trabajoForm.controls["horario3hasta"].setValue(null);
     }
     
 

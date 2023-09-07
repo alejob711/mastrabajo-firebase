@@ -31,6 +31,7 @@
                 <th>Fecha Creacion</th>
                 <th>Fecha<br> Vencimiento</th>
                 <th>Estado</th>
+                <th>Pago</th>
                 <th>Cant.<br>Postulantes</th>
                 <th>Acción</th>
               </tr>
@@ -44,6 +45,7 @@
                   <td>{{trabajo.fechaCreacion?.toDate() | date:'dd/MM/yy'}}</td>
                   <td>{{trabajo.fechaVencimiento?.toDate() | date:'dd/MM/yy'}}</td>
                   <td><span class="job-type {{obtenerCSSestado(trabajo)}}">{{calcularEstado(trabajo)}}</span></td>
+                  <td><span class="job-type {{obtenerCSSpago(trabajo)}}">{{visualizarEstadoPago(trabajo)}}</span></td>
                   <td class="text-center">
                     <a routerLink="/trabajos/postulantes/idtrabajo" data-toggle="modal" data-target="#apply-job" class="btn-job theme-btn job-apply">
                       <span *ngIf="!trabajo.postulantes">0</span>
@@ -52,7 +54,7 @@
                   </td>
                   <td>
                     <a routerLink="{{trabajo.id}}" class="cl-success mrg-5" data-toggle="tooltip" data-original-title="Edit"><i class="fa fa-edit"></i></a> 
-                    <a href="#" class="cl-danger mrg-5" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></a>
+                    <a (click)="eliminarTrabajo(trabajo.id)" class="cl-danger mrg-5" data-toggle="tooltip" data-original-title="Delete"><i class="fa fa-trash-o"></i></a>
                   </td>
                 </tr>
             </tbody>

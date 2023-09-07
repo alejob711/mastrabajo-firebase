@@ -38,6 +38,8 @@
                                 <label >No especificar en publicacion</label>
                             </span>
                         </div>
+                    </div>
+                    <div class="row">
                         <div *ngIf="trabajoForm.get('noEspecificarEmpresa')?.value" class="col-md-12 col-sm-12 col-xs-12">
                             <label>Nombre Alternativo * (Se visualizará en el anuncio reemplazando el nombre de la empresa)</label>
                             <input type="text" formControlName="alternativaNombre" class="form-control" placeholder="Nombre Alternativo" required>
@@ -59,7 +61,8 @@
                             <span *ngIf="trabajoForm.get('puestoTrabajo')?.hasError('required') && trabajoForm.controls['puestoTrabajo'].touched"
                                 class="form-text text-danger">Este campo es obligatorio</span>
                         </div>
-                        
+                    </div>
+                    <div class="row">
                         <div class="col-md-6 col-sm-6 col-xs-12" *ngIf="isApiLoaded">
                             <label>Localidad *</label>
                             <input formControlName="ciudad" placeholder="ciudad, provincia" class="form-control"
@@ -75,6 +78,8 @@
                                 *ngIf="trabajoForm.get('provincia')?.hasError('required') && trabajoForm.controls['provincia'].touched"
                                 class="form-text text-danger">Este campo es obligatorio</span>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6 col-sm-6 col-xs-12">
                             <label>Tipo de Trabajo *</label>
                             <select class="wide form-control" formControlName="tipoTrabajoId">
@@ -93,6 +98,8 @@
                                 *ngIf="trabajoForm.get('areaTrabajoId')?.hasError('required') && trabajoForm.controls['areaTrabajoId'].touched"
                                 class="form-text text-danger">Este campo es obligatorio</span>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-12 col-sm-12 col-xs-12">
                             <label>Descripcion del Puesto | Requisitos *</label>
                             <textarea style="resize:none" rows="10" class="form-control" placeholder="Ingrese resumen" formControlName="descripcionPuesto"></textarea>
@@ -111,7 +118,7 @@
                 </div>
                 <div class="box-body">
                     <!-- HORARIOS 1 -->
-                    <div class="row">
+                    <div class="">
                         <div class="row">
                             <div class="col-md-12 col-sm-6 col-xs-12">
                                 <label>Horarios</label>
@@ -299,31 +306,33 @@
                 </div>
                 <div class="box-body">
                     <div class="row">
-                    <div class="col-md-12 col-sm-6 col-xs-12">
-                        <label>Remuneracion Ofrecida *</label>
-                        <select class="wide form-control" formControlName="remuneracionOfrecida" (ngModelChange)="validarRemuneracionOfrecida()">
-                            <option [ngValue]="1">Indicar Remuneracion </option>
-                            <option [ngValue]="2">Omitir Remuneracion </option>
-                        </select>
-                        <span
-                            *ngIf="trabajoForm.get('remuneracionOfrecida')?.hasError('required') && trabajoForm.controls['remuneracionOfrecida'].touched"
-                            class="form-text text-danger">Este campo es obligatorio</span>
+                        <div class="col-md-12 col-sm-6 col-xs-12">
+                            <label>Remuneracion Ofrecida *</label>
+                            <select class="wide form-control" formControlName="remuneracionOfrecida" (ngModelChange)="validarRemuneracionOfrecida()">
+                                <option [ngValue]="1">Indicar Remuneracion </option>
+                                <option [ngValue]="2">Omitir Remuneracion </option>
+                            </select>
+                            <span
+                                *ngIf="trabajoForm.get('remuneracionOfrecida')?.hasError('required') && trabajoForm.controls['remuneracionOfrecida'].touched"
+                                class="form-text text-danger">Este campo es obligatorio</span>
+                        </div>
                     </div>
-                    <div class="col-md-4 col-sm-6 col-xs-12" *ngIf="trabajoForm.get('remuneracionOfrecida')?.value === 1">
-                        <label>Tipo Remuneracion</label>
-                        <select class="wide form-control" formControlName="tipoRemuneracion">
-                            <option [ngValue]="1">Remuneracion Neta </option>
-                            <option [ngValue]="2">Remuneracion Bruta </option>
-                        </select>
-                    </div>
-                    <div class="col-md-4 col-sm-6 col-xs-12" *ngIf="trabajoForm.get('remuneracionOfrecida')?.value === 1">
-                        <label>Remuneracion Minima</label>
-                        <input class="form-control" formControlName="remuneracionMinima" type="number" min="0" max="999999" placeholder="$" >
-                    </div>
-                    <div class="col-md-4 col-sm-6 col-xs-12" *ngIf="trabajoForm.get('remuneracionOfrecida')?.value === 1">
-                        <label>Remuneracion Maxima</label>
-                        <input formControlName="remuneracionMaxima" class="form-control" type="number" min="0" max="999999" placeholder="$"  >
-                    </div>
+                    <div class="row">
+                        <div class="col-md-4 col-sm-6 col-xs-12" *ngIf="trabajoForm.get('remuneracionOfrecida')?.value === 1">
+                            <label>Tipo Remuneracion</label>
+                            <select class="wide form-control" formControlName="tipoRemuneracion">
+                                <option [ngValue]="1">Remuneracion Neta </option>
+                                <option [ngValue]="2">Remuneracion Bruta </option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-xs-12" *ngIf="trabajoForm.get('remuneracionOfrecida')?.value === 1">
+                            <label>Remuneracion Minima</label>
+                            <input class="form-control" formControlName="remuneracionMinima" type="number" min="0" max="999999" placeholder="$" >
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-xs-12" *ngIf="trabajoForm.get('remuneracionOfrecida')?.value === 1">
+                            <label>Remuneracion Maxima</label>
+                            <input formControlName="remuneracionMaxima" class="form-control" type="number" min="0" max="999999" placeholder="$"  >
+                        </div>
                     </div>
                 </div>
             </div>
@@ -360,36 +369,38 @@
                         </div>
                     </div>
                     <div class="col-md-12 col-sm-6 col-xs-12">
-                        <label>Educacion</label>
+                        <label>Educación</label>
                         <div class="row">
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label>Nivel de Estudio Mínimo *</label>
-                            <select class="wide form-control" formControlName="nivelEstudioMinimo">
-                                <option [ngValue]="1">Secundario </option>
-                                <option [ngValue]="2">Universitario </option>
-                                <option [ngValue]="3">Postgrado/Maestria/Doctorado </option>
-                                <option [ngValue]="4">Curso de formacion profesional/diplomatura </option>
-                            </select>
-                            <span
-                                *ngIf="trabajoForm.get('nivelEstudioMinimo')?.hasError('required') && trabajoForm.controls['nivelEstudioMinimo'].touched"
-                                class="form-text text-danger">Este campo es obligatorio</span>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label>Nivel de Estudio Mínimo *</label>
+                                <select class="wide form-control" formControlName="nivelEstudioMinimo">
+                                    <option [ngValue]="1">Secundario </option>
+                                    <option [ngValue]="2">Universitario </option>
+                                    <option [ngValue]="3">Postgrado/Maestria/Doctorado </option>
+                                    <option [ngValue]="4">Curso de formacion profesional/diplomatura </option>
+                                </select>
+                                <span
+                                    *ngIf="trabajoForm.get('nivelEstudioMinimo')?.hasError('required') && trabajoForm.controls['nivelEstudioMinimo'].touched"
+                                    class="form-text text-danger">Este campo es obligatorio</span>
+                            </div>
+                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                <label>Estado de Estudios *</label>
+                                <select class="wide form-control" formControlName="estadoEstudios">
+                                    <option [ngValue]="1">Completo </option>
+                                    <option [ngValue]="2">Avanzado </option>
+                                    <option [ngValue]="3">En Curso </option>
+                                    <option [ngValue]="4">Incompleto </option>
+                                </select>
+                                <span
+                                    *ngIf="trabajoForm.get('estadoEstudios')?.hasError('required') && trabajoForm.controls['estadoEstudios'].touched"
+                                    class="form-text text-danger">Este campo es obligatorio</span>
+                            </div>
                         </div>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                            <label>Estado de Estudios *</label>
-                            <select class="wide form-control" formControlName="estadoEstudios">
-                                <option [ngValue]="1">Completo </option>
-                                <option [ngValue]="2">Avanzado </option>
-                                <option [ngValue]="3">En Curso </option>
-                                <option [ngValue]="4">Incompleto </option>
-                            </select>
-                            <span
-                                *ngIf="trabajoForm.get('estadoEstudios')?.hasError('required') && trabajoForm.controls['estadoEstudios'].touched"
-                                class="form-text text-danger">Este campo es obligatorio</span>
-                        </div>
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <label>Áreas de Estudio</label>
-                            <textarea formControlName="areasEstudio" style="resize:none" rows="4" class="form-control" placeholder="Áreas de Estudio"></textarea>
-                        </div>
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <label>Áreas de Estudio</label>
+                                <textarea formControlName="areasEstudio" style="resize:none" rows="4" class="form-control" placeholder="Áreas de Estudio"></textarea>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12">

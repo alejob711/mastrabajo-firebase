@@ -3,6 +3,7 @@ import { TrabajoFirestoreService } from '../../services/trabajo-firestore.servic
 import { Trabajo } from '../../interfaces/trabajo.interface';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../../usuarios/services/auth.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-mistrabajos',
@@ -36,6 +37,45 @@ export class MistrabajosComponent implements OnInit {
     }else{
       return 'internship-type';
     }
+  }
+
+  visualizarEstadoPago(trabajo:Trabajo){
+    if(trabajo.pagado){
+      return 'Pagado'
+    }else{
+      return 'Pend. Pago.'
+    }
+  }
+
+  obtenerCSSpago(trabajo:Trabajo){
+    if(trabajo.pagado){
+      return 'full-type'
+    }else{
+      return 'internship-type';
+    }
+  }
+
+  eliminarTrabajo( idTrabajo : string){
+
+    Swal.fire({
+      title: '¿Está seguro de elimnar el trabajo?',
+      text: 'Esta accion no podrá ser revertida.',
+      icon: 'question',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#5a435c',
+      cancelButtonText:'Cancelar',
+      cancelButtonColor: '#d33',
+      allowOutsideClick: true,
+      showCancelButton: true
+    }).then((res)=>{
+      console.log(res);
+      if (res.isConfirmed) {
+        this.trabajoFirestoreService.delete(idTrabajo).then((res)=>{
+          Swal.fire("El trabajo ha sido eliminada con éxito.", '', 'success');
+        })
+      } 
+    });
+
   }
 
 }
