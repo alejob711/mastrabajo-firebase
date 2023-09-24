@@ -38,10 +38,10 @@
                     <div class="row">
                         <div class="col-xs-12 padd-bot-20">
                             <label>Anuncio *</label>
-                            <select formControlName="idTrabajo" *ngFor="let trabajo of trabajosNoPagadosDeUsuario" class="wide form-control">
-                                <option value="{{trabajo.id}}" >{{trabajo.empresaNombre}} - {{trabajo.puestoTrabajo}} - {{trabajo.ciudad}}, {{trabajo.provincia}}</option>
+                            <select formControlName="idTrabajoPagado" class="wide form-control">
+                                <option  *ngFor="let trabajo of trabajosNoPagadosDeUsuario" [ngValue]="trabajo.id" >{{trabajo.empresaNombre}} - {{trabajo.puestoTrabajo}} - {{trabajo.ciudad}}, {{trabajo.provincia}} - Fecha Creacion: {{trabajo.fechaCreacion?.toDate() | date:'dd/MM/yy'}}</option>
                             </select>
-                            <span *ngIf="informePagoForm.get('idTrabajo')?.hasError('required') && informePagoForm.controls['idTrabajo'].touched" class="form-text text-danger">
+                            <span *ngIf="informePagoForm.get('idTrabajoPagado')?.hasError('required') && informePagoForm.controls['idTrabajoPagado'].touched" class="form-text text-danger">
                                 Este campo es obligatorio
                             </span>
                         </div>

@@ -45,6 +45,4 @@ export interface Trabajo {
     fechaVencimiento : any,
     postulantes : Array <string> | null;
     pagado : boolean;
-    //numeroOperacionPago : string | null;
-    //estado: string | null;
   }

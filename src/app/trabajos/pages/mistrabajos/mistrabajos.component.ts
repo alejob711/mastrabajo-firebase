@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { TrabajoFirestoreService } from '../../services/trabajo-firestore.service';
 import { Trabajo } from '../../interfaces/trabajo.interface';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { AuthService } from '../../../usuarios/services/auth.service';
 import Swal from 'sweetalert2';
+import { InformarPagoFirestoreService } from 'src/app/usuarios/services/informar-pago-firestore.service';
+import { InformePago } from 'src/app/usuarios/interfaces/informePago';
 
 @Component({
   selector: 'app-mistrabajos',
@@ -15,12 +17,24 @@ export class MistrabajosComponent implements OnInit {
 
   todosLosTrabajos : Observable<Trabajo[]>;
   empresa : Observable<any>;
+  todosLosInformesDePago : InformePago[];
+
+  test : any;
 
   constructor( private trabajoFirestoreService : TrabajoFirestoreService,
-               private authService : AuthService) { }
+               private authService : AuthService,
+               private informarPagoFirestoreService : InformarPagoFirestoreService,
+               ) { }
 
   ngOnInit(): void {
+
+    this.informarPagoFirestoreService.getAll(this.authService.userID).subscribe(res=>{
+      this.todosLosInformesDePago = res;
+      console.log(this.todosLosInformesDePago);
+    })
+
     this.todosLosTrabajos = this.trabajoFirestoreService.getAll(this.authService.userID);
+
   }
 
   calcularEstado(trabajo:Trabajo){
@@ -40,20 +54,76 @@ export class MistrabajosComponent implements OnInit {
   }
 
   visualizarEstadoPago(trabajo:Trabajo){
+
     if(trabajo.pagado){
-      return 'Pagado'
+      let trabajoProcesado = this.todosLosInformesDePago.filter(informePago => informePago.idTrabajoPagado == trabajo.id);
+      if (trabajoProcesado[0].procesado){
+        return 'Procesado'
+      }else{
+        return 'pend.proc'
+      }
     }else{
-      return 'Pend. Pago.'
+      return 'PEND.PAG'
     }
+
   }
 
   obtenerCSSpago(trabajo:Trabajo){
     if(trabajo.pagado){
-      return 'full-type'
+      let trabajoProcesado = this.todosLosInformesDePago.filter(informePago => informePago.idTrabajoPagado == trabajo.id);
+      if (trabajoProcesado[0].procesado){
+        return 'full-type'
+      }else{
+        return 'pendProc'
+      }
     }else{
       return 'internship-type';
     }
   }
+
+  obtenerCSSHabilitado(trabajo:Trabajo){
+    if(trabajo.pagado){
+      // let trabajoProcesado = this.todosLosInformesDePago.filter(informePago =>informePago.idTrabajoPagado = trabajo.id);
+      // return trabajoProcesado[0]?.procesado;  
+      let trabajoProcesado = this.todosLosInformesDePago.filter(informePago => informePago.idTrabajoPagado == trabajo.id);
+      if (trabajoProcesado[0].procesado){
+        return ''
+      }else{
+        return 'pagoNoProcesado'
+      }
+    }else{
+      return 'pagoNoProcesado'
+    }
+  }
+  
+  verPostulacionesDeTrabajo(trabajo:Trabajo){
+    // if(trabajo.pagado){
+    //   let trabajoProcesado = this.todosLosInformesDePago.filter(informePago =>informePago.idTrabajoPagado = trabajo.id);
+    //   if (trabajoProcesado[0]?.procesado){
+    //     console.log('ver postulacion de trabajo');
+    //   }
+      
+    // }
+
+    if (trabajo.pagado){
+      return this.todosLosInformesDePago.forEach(informePago=>{
+        if (informePago.procesado){
+          return 'pagoProcesado'
+        }else{
+          return 'pagoNoProcesado'
+        }
+      })
+    }
+  }
+
+  // estaProcesado(trabajo:Trabajo) : boolean{
+  //   if(trabajo.pagado){
+  //     let trabajoProcesado = this.todosLosInformesDePago.filter(informePago =>informePago.idTrabajoPagado = trabajo.id);
+  //     return trabajoProcesado[0]?.procesado;
+  //   }else{
+  //     return false;
+  //   }  
+  // }
 
   eliminarTrabajo( idTrabajo : string){
 
@@ -68,7 +138,6 @@ export class MistrabajosComponent implements OnInit {
       allowOutsideClick: true,
       showCancelButton: true
     }).then((res)=>{
-      console.log(res);
       if (res.isConfirmed) {
         this.trabajoFirestoreService.delete(idTrabajo).then((res)=>{
           Swal.fire("El trabajo ha sido eliminada con éxito.", '', 'success');

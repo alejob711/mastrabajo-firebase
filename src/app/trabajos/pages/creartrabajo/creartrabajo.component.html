@@ -404,11 +404,8 @@
                         </div>
                     </div>
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <label>Experiencias Laborales Previas *</label>
+                        <label>Experiencias Laborales Previas</label>
                         <textarea formControlName="experienciasLaboralesPrevias" style="resize:none" rows="4" class="form-control" placeholder="Experiencias Laborales Previas"></textarea>
-                        <span
-                            *ngIf="trabajoForm.get('experienciasLaboralesPrevias')?.hasError('required') && trabajoForm.controls['experienciasLaboralesPrevias'].touched"
-                            class="form-text text-danger">Este campo es obligatorio</span>
                     </div>
                     </div>
                 </div>

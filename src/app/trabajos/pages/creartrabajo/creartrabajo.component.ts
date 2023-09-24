@@ -112,7 +112,7 @@ export class CreartrabajoComponent implements OnInit {
     nivelEstudioMinimo: [ , [Validators.required]],
     estadoEstudios: [ , [Validators.required]],
     areasEstudio: [],
-    experienciasLaboralesPrevias: [ , [Validators.required]],
+    experienciasLaboralesPrevias: [ ],
     noEspecificarEmpresa : [false],
     alternativaNombre : [, Validators.maxLength(25)]
   }); 
@@ -249,7 +249,7 @@ export class CreartrabajoComponent implements OnInit {
           nivelEstudioMinimo: [ trabajo['nivelEstudioMinimo'], [Validators.required]],
           estadoEstudios: [ trabajo['estadoEstudios'], [Validators.required]],
           areasEstudio: [ trabajo['areasEstudio']],
-          experienciasLaboralesPrevias: [ trabajo['experienciasLaboralesPrevias'], [Validators.required]],
+          experienciasLaboralesPrevias: [ trabajo['experienciasLaboralesPrevias']],
           noEspecificarEmpresa : [trabajo['noEspecificarEmpresa']],
           alternativaNombre : [ trabajo['alternativaNombre'], Validators.maxLength(25)]
         }); 

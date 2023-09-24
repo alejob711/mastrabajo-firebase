@@ -15,55 +15,19 @@
       <div class="row">
         <div class="col-md-3 col-sm-5">
           
-          <div class="widget-boxed">
+          <div *ngIf="verFiltroLocalidad" class="widget-boxed">
             <h4 class="job_vacancie mrg-bot-20">Filtrar Por: </h4>
-            <div class="widget-boxed-body">
+            <div class="widget-boxed-body" *ngIf="isApiLoaded">
               <div class="search_widget_job">
-                <!-- <div class="field_w_search padd-bot-20">
-                  <input type="text" class="form-control" placeholder="Palabra Clave">
-                </div> -->
                 <div class="field_w_search">
-                  <input type="text" class="form-control" placeholder="Ubicacion">
+                  <input type="text" placeholder="Ubicacion" class="form-control"
+                                [options]="options" ngx-google-places-autocomplete (onAddressChange)="filtrarPorLocalidad($event)" />
                 </div>
               </div>
             </div>
           </div>
-          <!-- <div class="widget-boxed">
-            <div class="widget-boxed-header">
-              <h4>Oferta Salarial</h4>
-            </div>
-            <div class="widget-boxed-body">
-              <div class="side-list no-border">
-                <ul>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" id="1">
-                      <label for="1"></label>
-                    </span> $40.000 - $60.000<span class="pull-right">102</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" id="2">
-                      <label for="2"></label>
-                    </span> $60.000 - $80.000 <span class="pull-right">78</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" id="3">
-                      <label for="3"></label>
-                    </span> $80.000 - $100.000 <span class="pull-right">12</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" id="4">
-                      <label for="4"></label>
-                    </span> $100.000 - $150.000 <span class="pull-right">85</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" id="5">
-                      <label for="5"></label>
-                    </span> Mas de $150.000 <span class="pull-right">307</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div> -->
+          
+          <!-- NUEVO TIPO TRABAJO INIT -->
           <div *ngIf="verFiltrosTipoTrabajo" class="widget-boxed">
             <div class="widget-boxed-header">
               <h4>Tipo de Trabajo</h4>
@@ -71,45 +35,19 @@
             <div class="widget-boxed-body">
               <div class="side-list no-border">
                 <ul>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Pasantia" (change)="filtrarTrabajos('Tipo Trabajo',$event)">
+                  <li *ngFor="let tipoTrabajo of todosLosTipoTrabajos"> 
+                    <span class="custom-checkbox">
+                      <input type="checkbox" value="{{tipoTrabajo.nombre}}" (change)="filtrarPorTipoTrabajo(tipoTrabajo)">
                       <label for="a1"></label>
-                    </span> Pasantía <span class="pull-right" *ngIf="trabajosPasantia">{{trabajosPasantia.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Por Horas" (change)="filtrarTrabajos('Tipo Trabajo',$event)">
-                      <label for="c1"></label>
-                    </span> Por Horas <span class="pull-right" *ngIf="trabajosPorHoras">{{trabajosPorHoras.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Remoto" (change)="filtrarTrabajos('Tipo Trabajo',$event)">
-                      <label for="d1"></label>
-                    </span> Remoto <span class="pull-right" *ngIf="trabajosRemoto">{{trabajosRemoto.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Voluntario" (change)="filtrarTrabajos('Tipo Trabajo',$event)">
-                      <label for="e1"></label>
-                    </span> Voluntario <span class="pull-right" *ngIf="trabajosVoluntario">{{trabajosVoluntario.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Full Time" (change)="filtrarTrabajos('Tipo Trabajo',$event)">
-                      <label for="e1"></label>
-                    </span> Full Time <span class="pull-right" *ngIf="trabajosFullTime">{{trabajosFullTime.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Por Contrato" (change)="filtrarTrabajos('Tipo Trabajo',$event)">
-                      <label for="e1"></label>
-                    </span> Por Contrato <span class="pull-right" *ngIf="trabajosPorContrato">{{trabajosPorContrato.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Fin de Semana" (change)="filtrarTrabajos('Tipo Trabajo',$event)">
-                      <label for="e1"></label>
-                    </span> Fin de Semana <span class="pull-right" *ngIf="trabajosFDS">{{trabajosFDS.length}}</span>
+                    </span> {{tipoTrabajo.nombre}} <span class="pull-right" >{{obtenerCantidadTipoTrabajo(tipoTrabajo.id)}}</span>
                   </li>
                 </ul>
               </div>
             </div>
           </div>
+          <!-- NUEVO TIPO TRABAJO END -->
+          
+          <!-- NUEVO CATEGORIA TRABAJO INIT -->
           <div *ngIf="verFiltrosCategoria" class="widget-boxed ">
             <div class="widget-boxed-header br-0">
               <h4>Categoría </h4>
@@ -117,96 +55,17 @@
             <div class="widget-boxed-body" id="categoria">
               <div class="side-list no-border">
                 <ul>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Administracion" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Adm / Contabilidad <span class="pull-right" *ngIf="trabajosAdministracionContabilidad">{{trabajosAdministracionContabilidad.length}}</span>
+                  <li *ngFor="let categoria of todasLasCategoriasTrabajos"> 
+                    <span class="custom-checkbox">
+                      <input type="checkbox" value="{{categoria.nombre}}" (change)="filtrarPorCategoriaTrabajo(categoria)">
+                      <label for="a1"></label>
+                    </span> {{categoria.nombre}} <span class="pull-right" >{{obtenerCantidadTrabajosPorCategoria(categoria.id)}}</span>
                   </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Agropecuario" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Agropecuario <span class="pull-right" *ngIf="trabajosSectorAgropecuario">{{trabajosSectorAgropecuario.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Calidad" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Calidad <span class="pull-right" *ngIf="trabajosCalidad">{{trabajosCalidad.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Comercio Exterior" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Comercio Exterior <span class="pull-right" *ngIf="trabajosComercioExterior">{{trabajosComercioExterior.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Compras" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Compras <span class="pull-right" *ngIf="trabajosCompras">{{trabajosCompras.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Construccion" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Construccion <span class="pull-right" *ngIf="trabajosConstruccionOficios">{{trabajosConstruccionOficios.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Educacion" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Educación <span class="pull-right" *ngIf="trabajosEducacion">{{trabajosEducacion.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Gastronomia" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Gastronomía <span class="pull-right" *ngIf="trabajosGastronomia">{{trabajosGastronomia.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Limpieza" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Limpieza <span class="pull-right" *ngIf="trabajosLimpieza">{{trabajosLimpieza.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Logistica" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Logística <span class="pull-right" *ngIf="trabajosLogistica">{{trabajosLogistica.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Mantenimiento" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Mantenimiento <span class="pull-right" *ngIf="trabajosMantenimiento">{{trabajosMantenimiento.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Produccion" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Producción <span class="pull-right" *ngIf="trabajosProduccion">{{trabajosProduccion.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Publicidad" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Publicidad <span class="pull-right" *ngIf="trabajosPublicidad">{{trabajosPublicidad.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Rec. Humanos" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Rec. Humanos <span class="pull-right" *ngIf="trabajosRRHH">{{trabajosRRHH.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Salud" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Salud <span class="pull-right" *ngIf="trabajosSalud">{{trabajosSalud.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Sistemas" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Sistemas <span class="pull-right" *ngIf="trabajosSistemas">{{trabajosSistemas.length}}</span>
-                  </li>
-                  <li> <span class="custom-checkbox">
-                      <input type="checkbox" value="Ventas" (change)="filtrarTrabajos('Categoria',$event)">
-                      <label for="a"></label>
-                    </span> Ventas <span class="pull-right" *ngIf="trabajosAtencionAlPublicoVentas">{{trabajosAtencionAlPublicoVentas.length}}</span>
-                  </li>
-                  
                 </ul>
               </div>
             </div>
           </div>
+          <!-- NUEVO CATEGORIA TRABAJO END -->
   
   
         </div>
@@ -238,7 +97,7 @@
               </div>
             </div>
             <div class="col-md-12 col-sm-12 col-xs-12 browse_job_tlt">
-                <a class="botonFiltros" *ngFor="let item of filtrosAplicados" (click)="eliminarFiltro(item.clave,item.valor)">{{item.valor}} X</a>
+                <a class="botonFiltros" *ngFor="let item of filtrosAplicados" (click)="eliminarFiltro(item.valor)">{{item.valor}} X</a>
               </div>
           </div>
   
@@ -248,13 +107,14 @@
               <div class="vertical-job-header">
                 <div class="vrt-job-cmp-logo"> 
                     <a href="job-detail.html">
-                        <img [src]="obtenerImagenEmpresa(trabajo.empresaId)"class="img-responsive" alt="" />
+                        <img *ngIf="!trabajo.noEspecificarEmpresa" [src]="obtenerImagenEmpresa(trabajo.empresaId)"class="img-responsive" alt="" />
+                        <img *ngIf="trabajo.noEspecificarEmpresa" src="../../../../assets/img/logo-black.png" class="img-responsive" alt="" />
                     </a> 
                 </div>
                 
                 <h4 *ngIf="!trabajo.noEspecificarEmpresa"><a href="job-detail.html">{{trabajo.empresaNombre}}</a></h4>
                 <h4 *ngIf="trabajo.noEspecificarEmpresa"><a href="job-detail.html">{{trabajo.alternativaNombre}}</a></h4>
-                <span class="com-tagline">{{trabajo.puestoTrabajo}}</span>
+                <span class="com-tagline">Solicita: {{trabajo.puestoTrabajo}}</span>
               </div>
               <div class="vertical-job-body">
                 <div class="row">
@@ -263,7 +123,6 @@
                       <li><strong><b>Tipo de trabajo:</b> </strong>{{obtenerNombreTipoTrabajo(trabajo.tipoTrabajoId)}}</li>
                       <li><strong><b>Ubicacion: </b></strong>{{trabajo.ciudad}}, {{trabajo.provincia}} </li>
                       <li *ngIf="trabajo.remuneracionMaxima || trabajo.remuneracionMinima"><strong><b>Remuneracion: </b></strong>${{trabajo.remuneracionMinima}} - ${{trabajo.remuneracionMaxima}} {{obtenerTipoRemuneracion(trabajo.tipoRemuneracion)}}</li>
-                      <li *ngIf="!trabajo.remuneracionMaxima && !trabajo.remuneracionMinima"><strong><b>Remuneracion: </b></strong>A definir</li>
                       <li><strong><b>Edad: </b></strong><span *ngIf="!trabajo.edadMaxima">Mayor de </span>{{trabajo.edadMinima}} <span *ngIf="trabajo.edadMaxima">a {{trabajo.edadMaxima}}</span> años</li>
                       <li><strong><b>Genero: </b></strong>{{obtenerGenero(trabajo.genero)}}</li>
                     </ul>

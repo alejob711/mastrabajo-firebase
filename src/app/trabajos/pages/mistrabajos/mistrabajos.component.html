@@ -47,7 +47,7 @@
                   <td><span class="job-type {{obtenerCSSestado(trabajo)}}">{{calcularEstado(trabajo)}}</span></td>
                   <td><span class="job-type {{obtenerCSSpago(trabajo)}}">{{visualizarEstadoPago(trabajo)}}</span></td>
                   <td class="text-center">
-                    <a routerLink="/trabajos/postulantes/idtrabajo" data-toggle="modal" data-target="#apply-job" class="btn-job theme-btn job-apply">
+                    <a (click)="verPostulacionesDeTrabajo(trabajo)" data-toggle="modal" data-target="#apply-job" class="btn-job theme-btn job-apply {{obtenerCSSHabilitado(trabajo)}}">
                       <span *ngIf="!trabajo.postulantes">0</span>
                       <span *ngIf="trabajo.postulantes">{{trabajo.postulantes.length}}</span>
                     </a>

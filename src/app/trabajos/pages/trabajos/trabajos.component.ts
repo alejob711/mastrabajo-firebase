@@ -6,6 +6,9 @@ import { TipoTrabajo } from 'src/app/tipotrabajo/interfaces/tipotrabajo.interfac
 import { TipotrabajoFirestoreService } from '../../../tipotrabajo/services/tipotrabajo-firestore.service';
 import { EmpresaFirestoreService } from '../../../empresa/services/empresa-firestore.service';
 import { Empresa } from 'src/app/empresa/interfaces/empresa.interface';
+import { Categoria } from 'src/app/categorias/interfaces/categoria';
+import { CategoriaFirestoreService } from 'src/app/categorias/services/categoria-firestore.service';
+import { MapsAPILoader } from '@agm/core';
 
 @Component({
   selector: 'app-trabajos',
@@ -18,6 +21,13 @@ export class TrabajosComponent implements OnInit {
   todosLosTrabajosInicial : Trabajo[] = [];
   todosLosTipoTrabajos : TipoTrabajo[];
   todasLasEmpresas : Empresa[] = [];
+  todasLasCategoriasTrabajos : Categoria[] = [];
+
+  isApiLoaded = false;
+  options: any = {
+    componentRestrictions : {country : "AR"},
+    types: ['(cities)'],
+  }
 
   trabajosPorContrato : Trabajo[];
   trabajosPorHoras : Trabajo[];
@@ -47,6 +57,7 @@ export class TrabajosComponent implements OnInit {
 
   verFiltrosCategoria : boolean = true;
   verFiltrosTipoTrabajo : boolean = true;
+  verFiltroLocalidad : boolean = true;
 
   filtrosAplicados : any[] = [];
 
@@ -54,22 +65,29 @@ export class TrabajosComponent implements OnInit {
               @Inject(DOCUMENT) private _document : any,
               private trabajoFirestoreService : TrabajoFirestoreService,
               private tipotrabajoFirestoreService : TipotrabajoFirestoreService,
-              private empresaFirestoreService : EmpresaFirestoreService) { }
+              private empresaFirestoreService : EmpresaFirestoreService,
+              private categoriasFirestoreService : CategoriaFirestoreService,
+              private mapsAPILoader: MapsAPILoader,) { }
 
   ngOnInit(): void {
+
+    //ESTO CARGA LA API PARA PODER HACER LA PRE VISUALIZACION DE DIRECCIONES CON GOOGLE MAPS
+    this.mapsAPILoader.load().then(() =>{
+      this.isApiLoaded = true
+    })
 
     this.trabajoFirestoreService.getAll().subscribe(res=>{
       this.todosLosTrabajos = res;
       this.todosLosTrabajosInicial = res;
-      this.obtenerCantidadTipoTrabajo();
-      this.obtenerCantidadTrabajosPorCategoria();
+      //this.obtenerCantidadTipoTrabajo();
+      //this.obtenerCantidadTrabajosPorCategoria();
     });
 
     this.tipotrabajoFirestoreService.getAll().subscribe(res => this.todosLosTipoTrabajos = res);
 
-    this.empresaFirestoreService.getAll().subscribe(res=>{
-      this.todasLasEmpresas = res;
-    });
+    this.categoriasFirestoreService.getAll().subscribe(res => this.todasLasCategoriasTrabajos = res);
+
+    this.empresaFirestoreService.getAll().subscribe(res=> this.todasLasEmpresas = res );
 
   }
 
@@ -129,81 +147,152 @@ export class TrabajosComponent implements OnInit {
     }
   }
 
-  async eliminarFiltro(clave:string, valor:string){
+  async eliminarFiltro(valor:string){
 
-    //this.todosLosTrabajos = this.todosLosTrabajosInicial;
-    
     this.filtrosAplicados = this.filtrosAplicados.filter(filtro => filtro.valor != valor);
 
+    this.todosLosTrabajos = await this.todosLosTrabajosInicial;
+
+    console.log(this.filtrosAplicados);
+
+    this.verFiltrosCategoria = true;
+    this.verFiltrosTipoTrabajo = true;
+    this.verFiltroLocalidad = true;
+
     if (this.filtrosAplicados.length === 0){
-      console.log('filtros aplicados = 0');
-      this.todosLosTrabajos = await this.todosLosTrabajosInicial;
-      this.obtenerCantidadTipoTrabajo();
-      this.obtenerCantidadTrabajosPorCategoria();
-      this.verFiltrosCategoria = true;
-      this.verFiltrosTipoTrabajo = true;
+      // this.verFiltrosCategoria = true;
+      // this.verFiltrosTipoTrabajo = true;
+      // this.verFiltroLocalidad = true;
     }else{
-      console.log(clave, valor);
-      if (clave === 'Categoria'){
-        this.verFiltrosCategoria = true;
-      } else if(clave === 'Tipo Trabajo'){
-        this.verFiltrosTipoTrabajo = true;
-      }
-      
-      console.log('filtros aplicados', this.filtrosAplicados);
-      this.obtenerCantidadTipoTrabajo();
-      this.obtenerCantidadTrabajosPorCategoria();
+      await this.filtrosAplicados.forEach(async (filtroAplicado) => {
+        console.log('Filtro Aplicado: ',filtroAplicado);
+        console.log('Trabajos: ',this.todosLosTrabajos);
+
+        if (filtroAplicado.clave === 'Categoria'){
+          await this.filtrarPorCategoriaTrabajo(filtroAplicado.objeto, true);
+          // this.verFiltrosTipoTrabajo = true;
+          // this.verFiltroLocalidad = true;
+        }else if(filtroAplicado.clave === 'Tipo Trabajo'){
+          await this.filtrarPorTipoTrabajo(filtroAplicado.objeto, true);
+          // this.verFiltrosCategoria = true;
+          // this.verFiltroLocalidad = true;
+        }else{
+          await this.filtrarPorLocalidad(filtroAplicado.objeto, true);
+          // this.verFiltrosCategoria = true;
+          // this.verFiltrosTipoTrabajo = true;
+        }
+      });
     }
   }
 
-  obtenerCantidadTipoTrabajo(){
-    if (this.todosLosTrabajos.length > 0){
-      this.trabajosPorContrato = this.todosLosTrabajos.filter(trabajo=>trabajo.tipoTrabajoId === '8Y2scgC2BFlLBa4FLlmZ');
-      this.trabajosPorHoras = this.todosLosTrabajos.filter(trabajo=>trabajo.tipoTrabajoId === '9RU30p9XKrIbjHr8QAaL');
-      this.trabajosFullTime = this.todosLosTrabajos.filter(trabajo=>trabajo.tipoTrabajoId === 'RIDAJpoY30jfUl5PJK3N');
-      this.trabajosVoluntario = this.todosLosTrabajos.filter(trabajo=>trabajo.tipoTrabajoId === 'TFnyZdJBAuyWCBcEOCzj');
-      this.trabajosPasantia = this.todosLosTrabajos.filter(trabajo=>trabajo.tipoTrabajoId === 'Wwb8E4vMVzxrrZBqg9Jk');
-      this.trabajosRemoto = this.todosLosTrabajos.filter(trabajo=>trabajo.tipoTrabajoId === 'XJNo9qkQiLLrAcZ34z42');
-      this.trabajosFDS = this.todosLosTrabajos.filter(trabajo=>trabajo.tipoTrabajoId === 'fkzqbAIsd4kGmn9gEWiA');
+  async filtrarPorLocalidad(address: any, filtroYaExistente ? : boolean) {
+
+    let nombreLocalidad = address.name;
+
+    let provincia = address.address_components.filter( (ac : any) => ac.types[0] === "administrative_area_level_1" )
+    
+    if (!filtroYaExistente){
+      this.filtrosAplicados.push({clave : 'Localidad', valor : nombreLocalidad, objeto : address});
     }
+
+    this.todosLosTrabajos = await this.todosLosTrabajos.filter(trabajo=>trabajo.ciudad === nombreLocalidad && trabajo.provincia == provincia[0].short_name);
+
+    this.verFiltroLocalidad = false;
+
+    console.log(this.todosLosTrabajos);
+
+  }
+
+  /**
+   * Obtener Cantidad Tipo Trabajo
+   * 
+   * Obtiene un vector por cada tipo de trabajo, 
+   * en el cual se listan los trabajos que pertenecen a ese tipo de trabajo
+   */
+  obtenerCantidadTipoTrabajo(tipoTrabajoID : string) : number {
+    let trabajosPorTipoTrabajo = this.todosLosTrabajos.filter(trabajo=>trabajo.tipoTrabajoId === tipoTrabajoID);
+    return trabajosPorTipoTrabajo.length;
   }
   
-  obtenerCantidadTrabajosPorCategoria(){
-    if (this.todosLosTrabajos.length > 0){
-      this.trabajosCompras = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === '14saW681gysD0XpxyGP2');
-      this.trabajosGastronomia = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === '2w6aer7y3e4CZ5cWHIAt');
-      this.trabajosSistemas = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'AXfjZmIiZl4AB9X1qjOB');
-      this.trabajosLogistica = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'B5iw9sGWRFaGHULtcnDu');
-      this.trabajosLimpieza = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'BHtko3JcSuPz8ryOflCL');
-      this.trabajosSalud = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'EWr7t73al9qdP5T5Qh2Q');
-      this.trabajosPublicidad = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'N0NAcgWKINN5NQ5nxAFH');
-      this.trabajosRRHH = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'RYbZZ6fPpZJAk3j70D0b');
-      this.trabajosSectorAgropecuario = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'RviW4monjMFVfZYv62yV');
-      this.trabajosConstruccionOficios = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'SHmFvTFQZGatz5ijkEi9');
-      this.trabajosCalidad = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'kGqfYpLx26wb1WqOGS0v');
-      this.trabajosProduccion = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'c8AKv79Aa1DRNw6Q8hd0');
-      this.trabajosComercioExterior = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'lhs5GlFCLTmzkr4hAF9l');
-      this.trabajosAtencionAlPublicoVentas = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'nQXaX5PlVge41aXd4Px8');
-      this.trabajosEducacion = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'oWSHkalva8oO5tirooAp');
-      this.trabajosMantenimiento = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'tu2sErQxbguUz4WOCxxw');
-      this.trabajosAdministracionContabilidad = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'wt9UBdTsdhcUkklKeDva');
-    }
+  /**
+   * Obtener Cantidad Trabajos Por Categoria
+   * 
+   * Obtiene un vector por cada categoria de trabajo, 
+   * en el cual se listan los trabajos que pertenecen a esa categoria
+   */
+  // obtenerCantidadTrabajosPorCategoria(){
+  //   if (this.todosLosTrabajos.length > 0){
+  //     this.trabajosCompras = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === '14saW681gysD0XpxyGP2');
+  //     this.trabajosGastronomia = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === '2w6aer7y3e4CZ5cWHIAt');
+  //     this.trabajosSistemas = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'AXfjZmIiZl4AB9X1qjOB');
+  //     this.trabajosLogistica = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'B5iw9sGWRFaGHULtcnDu');
+  //     this.trabajosLimpieza = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'BHtko3JcSuPz8ryOflCL');
+  //     this.trabajosSalud = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'EWr7t73al9qdP5T5Qh2Q');
+  //     this.trabajosPublicidad = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'N0NAcgWKINN5NQ5nxAFH');
+  //     this.trabajosRRHH = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'RYbZZ6fPpZJAk3j70D0b');
+  //     this.trabajosSectorAgropecuario = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'RviW4monjMFVfZYv62yV');
+  //     this.trabajosConstruccionOficios = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'SHmFvTFQZGatz5ijkEi9');
+  //     this.trabajosCalidad = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'kGqfYpLx26wb1WqOGS0v');
+  //     this.trabajosProduccion = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'c8AKv79Aa1DRNw6Q8hd0');
+  //     this.trabajosComercioExterior = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'lhs5GlFCLTmzkr4hAF9l');
+  //     this.trabajosAtencionAlPublicoVentas = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'nQXaX5PlVge41aXd4Px8');
+  //     this.trabajosEducacion = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'oWSHkalva8oO5tirooAp');
+  //     this.trabajosMantenimiento = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'tu2sErQxbguUz4WOCxxw');
+  //     this.trabajosAdministracionContabilidad = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === 'wt9UBdTsdhcUkklKeDva');
+  //   }
+  // }
+
+  obtenerCantidadTrabajosPorCategoria(categoriaTrabajoID : string){
+    let trabajosPorCategoria = this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === categoriaTrabajoID);
+    return trabajosPorCategoria.length;
   }
 
-  async filtrarTrabajos(tipoFiltro:string ,event:any){
-    console.log(tipoFiltro);
-    if (tipoFiltro === 'Categoria'){
-      this.filtrosAplicados.push({clave : 'Categoria', valor : event.srcElement.defaultValue});
-      await this.filtrarCategorias(event);
-      await this.obtenerCantidadTipoTrabajo();
-      this.verFiltrosCategoria=false;
-    }else if(tipoFiltro ==='Tipo Trabajo'){
-      this.filtrosAplicados.push({clave : 'Tipo Trabajo', valor : event.srcElement.defaultValue});
-      await this.filtrarTipoTrabajo(event);
-      await this.obtenerCantidadTrabajosPorCategoria();
-      this.verFiltrosTipoTrabajo = false;
+  // /**
+  //  * Filtrar Trabajos
+  //  * 
+  //  * Al seleccionar un filtro
+  //  * @param tipoFiltro 
+  //  * @param event 
+  //  */
+  // async filtrarTrabajos(tipoFiltro:string ,event:any){
+  //   console.log(tipoFiltro);
+  //   if (tipoFiltro === 'Categoria'){
+  //     this.filtrosAplicados.push({clave : 'Categoria', valor : event.srcElement.defaultValue});
+  //     await this.filtrarCategorias(event);
+  //     //await this.obtenerCantidadTipoTrabajo();
+  //     this.verFiltrosCategoria=false;
+  //   }else if(tipoFiltro ==='Tipo Trabajo'){
+  //     this.filtrosAplicados.push({clave : 'Tipo Trabajo', valor : event.srcElement.defaultValue});
+  //     await this.filtrarTipoTrabajo(event);
+  //     //await this.obtenerCantidadTrabajosPorCategoria();
+  //     this.verFiltrosTipoTrabajo = false;
+  //   }
+    
+  // }
+
+  async filtrarPorTipoTrabajo(tipoTrabajo : TipoTrabajo, filtroYaExistente ? : boolean){
+    this.verFiltrosTipoTrabajo = false;
+    if (! filtroYaExistente){
+      this.filtrosAplicados.push({clave : 'Tipo Trabajo', valor : tipoTrabajo.nombre, objeto : tipoTrabajo});
     }
     
+    this.todosLosTrabajos = await this.todosLosTrabajos.filter(trabajo=>trabajo.tipoTrabajoId === tipoTrabajo.id);
+
+    console.log(this.todosLosTrabajos);
+
+  }
+
+  async filtrarPorCategoriaTrabajo(categoriaTrabajo : Categoria, filtroYaExistente ? : boolean){
+    this.verFiltrosCategoria = false;
+    
+    if (! filtroYaExistente){
+      this.filtrosAplicados.push({clave : 'Categoria', valor : categoriaTrabajo.nombre, objeto : categoriaTrabajo});
+    }
+
+    this.todosLosTrabajos = await this.todosLosTrabajos.filter(trabajo=>trabajo.areaTrabajoId === categoriaTrabajo.id);
+
+    console.log(this.todosLosTrabajos);
+
   }
 
   filtrarTipoTrabajo(event:any){

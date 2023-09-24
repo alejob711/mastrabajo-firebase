@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, User, sendPasswordResetEmail } from '@angular/fire/auth';
+import { Auth, UserCredential, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, updatePassword, User } from '@angular/fire/auth';
 import { UsuarioFirestoreService } from './usuario-firestore.service';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -11,6 +11,8 @@ import { Usuario } from '../interfaces/usuario';
 export class AuthService {
 
   userData: Usuario; // Save logged in user data
+
+  userLogged : User;
 
   constructor(private auth : Auth,
               private router: Router,
@@ -65,6 +67,8 @@ export class AuthService {
   login({email, password} : any){
     return signInWithEmailAndPassword(this.auth, email, password).then(res=>{
       if (res.user?.emailVerified){
+
+        this.userLogged = res.user;
 
         let sub = this.usuarioFirestoreService.get(res.user.uid).subscribe(resBD =>{
 
@@ -133,5 +137,15 @@ export class AuthService {
     this.userData = user;
     localStorage.setItem('user', JSON.stringify(this.userData));
     JSON.parse(localStorage.getItem('user')!);
+  }
+
+  updatePassword(newPassword:string){
+    console.log(this.userLogged);
+    return updatePassword(this.userLogged,newPassword).then(()=>{
+      return true
+    }).catch((error)=>{
+      console.log(error);
+      return false;
+    });
   }
 }

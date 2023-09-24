@@ -1,6 +1,6 @@
 export interface InformePago {
     id: string;
-    idTrabajo:string;
+    idTrabajoPagado:string;
     idUsuario:string;
     numeroOperacion:string;
     fechaRealizacion: Date;

@@ -48,4 +48,11 @@ export class InformarPagoFirestoreService {
     const informePagoDocumentReference = doc(this.firestore, `informePago/${id}`);
     return deleteDoc(informePagoDocumentReference);
   }
+
+  getInformePagoDeTrabajo(idTrabajo : string){
+    const refq = query(this.informePagoCollection,where('idTrabajo','==',idTrabajo));
+      return collectionData(refq, {
+        idField: 'id',
+      }) as Observable<InformePago[]>;
+  }
 }

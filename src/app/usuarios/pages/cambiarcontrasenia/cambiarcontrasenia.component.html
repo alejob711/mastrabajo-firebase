@@ -17,28 +17,42 @@
             <app-usuariotemplate></app-usuariotemplate>
         </div>
         <div class="col-md-9">
-          <div class="profile_detail_block">
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="form-group">
-                  <label>Contraseña actual</label>
-                  <input type="password" class="form-control">
+          <form [formGroup]="cambiarContraseniaForm" (ngSubmit)="submitCambiarContrasenia()" class="c-form">
+      
+            <!-- General Information -->
+            <div class="box">
+              <div class="box-header">
+                <h4>Cambiar Contraseña</h4>
+              </div>
+              <div class="box-body">
+                <div class="row">
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <label>Nueva Contraseña *</label>
+                    <input type="text" formControlName="nuevaContrasenia" class="form-control" required>
+                    <span *ngIf="cambiarContraseniaForm.get('nuevaContrasenia')?.hasError('required') && cambiarContraseniaForm.controls['nuevaContrasenia'].touched"
+                      class="form-text text-danger">Este campo es obligatorio.</span>
+                  </div>
+                  <div class="col-md-6 col-sm-6 col-xs-12">
+                    <label>Repetir Contraseña *</label>
+                    <input type="text" formControlName="repetirContrasenia" class="form-control" required>
+                    <span *ngIf="cambiarContraseniaForm.get('repetirContrasenia')?.hasError('required') && cambiarContraseniaForm.controls['repetirContrasenia'].touched"
+                      class="form-text text-danger">Este campo es obligatorio.</span>
+                    <span *ngIf="cambiarContraseniaForm.get('repetirContrasenia')?.hasError('minlength') && cambiarContraseniaForm.controls['repetirContrasenia'].touched"
+                      class="form-text text-danger">Este campo debe tener 8 caracteres como minimo.</span>
+                    <span *ngIf="cambiarContraseniaForm.get('repetirContrasenia')?.hasError('mustMatch')"
+                      class="form-text text-danger">Las Contraseñas no coinciden.</span>
+                  </div>
+                  
                 </div>
               </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="form-group">
-                  <label>Nueva Contraseña</label>
-                  <input type="password" class="form-control">
-                </div>
-              </div>
-              <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="form-group">
-                  <label>Repetir nueva</label>
-                  <input type="password" class="form-control" >
-                </div>
-              </div>	
-              <div class="clearfix"></div>
-              <div class="col-md-12 padd-top-10 text-center"> <a class="btn btn-m theme-btn full-width">Actualizar</a></div>
-          </div>
+            </div>
+      
+            <!-- Botón Guardar -->
+            <div class="text-center">
+              <button class="btn btn-m theme-btn full-width">Actualizar Contraseña</button>
+            </div>
+      
+          </form>
         </div>	  
       </div>
     </div>

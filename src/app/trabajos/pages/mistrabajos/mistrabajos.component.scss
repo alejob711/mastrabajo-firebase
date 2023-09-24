@@ -10,6 +10,22 @@
     margin: 6px auto;
 }
 
+.pagoNoProcesado{
+    cursor: default !important;
+}
+
+.theme-btn.pagoNoProcesado:hover, .theme-btn.pagoNoProcesado:focus {
+    background: #5a435c !important;
+    color: white !important;
+    border: 2px solid #5a435c !important;
+    font-weight: 600 !important;
+}
+
+.pendProc{
+    background-color: #5a425b;
+    color: white;
+}
+
 .theme-btn{
     cursor: pointer;
 }
