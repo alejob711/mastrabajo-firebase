@@ -89,7 +89,7 @@
                   <h5><a href="employer-detail.html">{{trabajo.puestoTrabajo | substring:25}}</a></h5>
                   <p class="text-muted descripcionPuesto">{{trabajo.descripcionPuesto | substring:135}}</p>
                 </div>
-                <div class="utf_apply_job_btn_item"> <a href="job-detail.html"
+                <div class="utf_apply_job_btn_item"> <a routerLink="/trabajos/{{trabajo.id}}"
                     class="btn job-browse-btn btn-radius br-light">Aplicar</a> </div>
               </div>
             </div>
@@ -122,8 +122,8 @@
                 <div class="utf_category_desc">
                   <div class="utf_category_icon"> <i class="icon-bargraph" aria-hidden="true"></i> </div>
                   <div class="category-detail utf_category_desc_text">
-                    <h4 class="texto-violeta">Programación</h4>
-                    <p *ngIf="todosLosTrabajos">{{cantSolicitProgramacion}} Solicitudes</p>
+                    <h4 class="texto-violeta">RR.HH.</h4>
+                    <p *ngIf="todosLosTrabajos">{{cantSolicitRRHH}} Solicitudes</p>
                   </div>
                 </div>
               </div>
@@ -135,8 +135,8 @@
                 <div class="utf_category_desc">
                   <div class="utf_category_icon"> <i class="icon-tools" aria-hidden="true"></i> </div>
                   <div class="category-detail utf_category_desc_text">
-                    <h4 class="texto-violeta">Administración</h4>
-                    <p>{{cantSolicitAdministracion}} solicitudes</p>
+                    <h4 class="texto-violeta">Educacion</h4>
+                    <p *ngIf="todosLosTrabajos">{{cantSolicitEducacion}} solicitudes</p>
                   </div>
                 </div>
               </div>
@@ -148,8 +148,8 @@
                 <div class="utf_category_desc">
                   <div class="utf_category_icon"> <i class="ti-briefcase" aria-hidden="true"></i> </div>
                   <div class="category-detail utf_category_desc_text">
-                    <h4 class="texto-violeta">Contabilidad</h4>
-                    <p>VER TRELLO!!</p>
+                    <h4 class="texto-violeta">Administracion</h4>
+                    <p *ngIf="todosLosTrabajos">{{cantSolicitAdministracion}} solicitudes</p>
                   </div>
                 </div>
               </div>
@@ -162,7 +162,7 @@
                   <div class="utf_category_icon"> <i class="ti-ruler-pencil" aria-hidden="true"></i> </div>
                   <div class="category-detail utf_category_desc_text">
                     <h4 class="texto-violeta">Logística</h4>
-                    <p>{{cantSolicitLogistica}} Solicitudes</p>
+                    <p *ngIf="todosLosTrabajos">{{cantSolicitLogistica}} Solicitudes</p>
                   </div>
                 </div>
               </div>
@@ -175,7 +175,7 @@
                   <div class="utf_category_icon"> <i class="icon-briefcase" aria-hidden="true"></i> </div>
                   <div class="category-detail utf_category_desc_text">
                     <h4 class="texto-violeta">Ventas</h4>
-                    <p>{{cantSolicitVentas}} Solicitudes</p>
+                    <p *ngIf="todosLosTrabajos">{{cantSolicitVentas}} Solicitudes</p>
                   </div>
                 </div>
               </div>
@@ -188,7 +188,7 @@
                   <div class="utf_category_icon"> <i class="icon-wine" aria-hidden="true"></i> </div>
                   <div class="category-detail utf_category_desc_text">
                     <h4 class="texto-violeta">Gastronomía</h4>
-                    <p>{{cantSolicitGastronomia}} Solicitudes</p>
+                    <p *ngIf="todosLosTrabajos">{{cantSolicitGastronomia}} Solicitudes</p>
                   </div>
                 </div>
               </div>
@@ -200,8 +200,8 @@
                 <div class="utf_category_desc">
                   <div class="utf_category_icon"> <i class="ti-world" aria-hidden="true"></i> </div>
                   <div class="category-detail utf_category_desc_text">
-                    <h4 class="texto-violeta">Comunicación</h4>
-                    <p>{{cantSolicitComunicacion}} solicitudes</p>
+                    <h4 class="texto-violeta">Publicidad</h4>
+                    <p *ngIf="todosLosTrabajos">{{cantSolicitComunicacion}} solicitudes</p>
                   </div>
                 </div>
               </div>
@@ -213,8 +213,8 @@
                 <div class="utf_category_desc">
                   <div class="utf_category_icon"> <i class="ti-desktop" aria-hidden="true"></i> </div>
                   <div class="category-detail utf_category_desc_text">
-                    <h4 class="texto-violeta">Educación</h4>
-                    <p>{{cantSolicitEducacion}} Solicitudes</p>
+                    <h4 class="texto-violeta">Informatica</h4>
+                    <p *ngIf="todosLosTrabajos">{{cantSolicitProgramacion}} Solicitudes</p>
                   </div>
                 </div>
               </div>
