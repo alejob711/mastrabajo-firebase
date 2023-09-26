@@ -1,0 +1,264 @@
+<!-- ======================= Page Title ===================== -->
+<div class="page-title">
+    <div class="container">
+      <div class="page-caption">
+        <h2>Detalle del Trabajo</h2>
+        <p><a href="#" title="Home">Inicio</a> <i class="ti-angle-double-right"></i> Detalle del Trabajo</p>
+      </div>
+    </div>
+  </div>
+  <!-- ======================= End Page Title ===================== --> 
+  
+  <!-- ====================== Start Job Detail 2 ================ -->
+  <section *ngIf="trabajo" class="padd-top-80 padd-bot-40">
+    <div class="container"> 
+      <!-- row -->
+      <div class="row">
+        <div class="col-md-8 col-sm-7">
+          <div class="detail-wrapper">
+            <div class="detail-wrapper-body">
+              <div class="row noMarginBottom">
+                  <div *ngIf="empresa" class="col-md-4 text-center user_profile_img"> 
+                    <img *ngIf="trabajo.noEspecificarEmpresa == false" [src]="empresa.imgLogo" class="width-100 imgEmpresa"  alt=""/>
+                    <img *ngIf="trabajo.noEspecificarEmpresa" src="../../../../assets/img/logo-black.png" class="width-100 imgEmpresa"  alt=""/>
+                    <!-- <h4 class="meg-0">Encargado de Depósito</h4> -->
+                    <!-- <span>Don Emilio SRL</span>  -->
+                    <!-- <div class="text-center">
+                      <button type="button" data-toggle="modal" data-target="#signin" class="btn-job theme-btn job-apply">Aplicar</button>
+                    </div> -->
+                  </div>
+                  <div class="col-md-8 user_job_detail">
+                    <!-- <h2 class="text-center">Don Emilio SRL</h2> -->
+                    <h2 *ngIf="trabajo.noEspecificarEmpresa == false" class="text-center">{{trabajo.empresaNombre}}</h2>
+                    <h2 *ngIf="trabajo.noEspecificarEmpresa" class="text-center">{{trabajo.alternativaNombre}}</h2>
+                    <h5 class="text-center">{{trabajo.puestoTrabajo}}</h5>
+                    <!-- <div class="text-center">
+                      <button type="button" data-toggle="modal" data-target="#signin" class="btn-job theme-btn job-apply">Quiero aplicar a este trabajo!</button>
+                    </div> -->
+                  </div>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="empresa" class="detail-wrapper">
+            <div class="detail-wrapper-header">
+              <h4>Descripción de la empresa</h4>
+            </div>
+            <div class="detail-wrapper-body">
+              <p class="formatText">{{empresa.resumen}}</p>
+            </div>
+          </div>
+          <div class="detail-wrapper">
+            <div class="detail-wrapper-header">
+              <h4>Descripción del Trabajo</h4>
+            </div>
+            <div class="detail-wrapper-body">
+              <p class="formatText">{{trabajo.descripcionPuesto}}</p>
+            </div>
+          </div>
+          <div class="detail-wrapper">
+            <div class="detail-wrapper-header">
+              <h4>Requerimientos</h4>
+            </div>
+            <div class="detail-wrapper-body">
+              <ul class="detail-list">
+                <li>
+                    <b>Genero:</b> 
+                    <span *ngIf="trabajo.genero=='2'"> Femenino</span>
+                    <span *ngIf="trabajo.genero=='1'"> Masculino</span>
+                    <span *ngIf="trabajo.genero=='3'"> Indistinto</span> 
+                </li>
+                <li>
+                    <b>Edad:</b> 
+                    <span *ngIf="!trabajo.edadMaxima"> Mayor a </span>
+                    <span *ngIf="trabajo.edadMinima"> {{trabajo.edadMinima}}</span> 
+                    <span *ngIf="trabajo.edadMaxima">  - {{trabajo.edadMaxima}} </span> 
+                    Años
+                </li>
+                <li>
+                    <b>Nivel de estudio minimo:</b>
+                    <span *ngIf="trabajo.nivelEstudioMinimo == '1'"> Secundario</span>
+                    <span *ngIf="trabajo.nivelEstudioMinimo == '2'"> Universitario</span>
+                    <span *ngIf="trabajo.nivelEstudioMinimo == '3'"> Postgrado/Maestria/Doctorado </span>
+                    <span *ngIf="trabajo.nivelEstudioMinimo == '4'"> Curso de formacion profesional/diplomatura </span>
+                    <span *ngIf="trabajo.estadoEstudios == '1'"> completo</span>
+                    <span *ngIf="trabajo.estadoEstudios == '2'"> avanzado</span>
+                    <span *ngIf="trabajo.estadoEstudios == '3'"> en curso</span>
+                    <span *ngIf="trabajo.estadoEstudios == '4'"> incompleto</span>
+                </li>
+                <li>
+                    <b>Area de estudio:</b> 
+                    <p class="formatText"> {{trabajo.areasEstudio}}</p>
+                </li>
+                <li>
+                    <b>Experiencia previa:</b> 
+                    <p class="formatText"> {{trabajo.experienciasLaboralesPrevias}}</p>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- <div class="detail-wrapper">
+            <div class="detail-wrapper-header">
+              <h4>Ubicacion</h4>
+            </div>
+            <div class="detail-wrapper-body">
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.566512514854!2d76.8192921147794!3d30.702470481647698!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fecca1d6c0001%3A0xe4953728a502a8e2!2sChandigarh!5e0!3m2!1sen!2sin!4v1520136168627" width="100%" height="320" frameborder="0" style="border:0" allowfullscreen></iframe>
+            </div>
+          </div> -->
+        </div>
+        
+        <!-- Sidebar -->
+        <div *ngIf="trabajo" class="col-md-4 col-sm-5">
+          <div class="sidebar"> 
+            <div class="text-center">
+              <button type="button" data-toggle="modal" data-target="#signin" class="btn-job theme-btn job-apply">Quiero aplicar a este trabajo!</button>
+            </div>
+            <!-- Start: Job Overview -->
+            <div class="widget-boxed">
+              <div class="widget-boxed-header">
+                <h4><i class="ti-info padd-r-10"></i>Detalles</h4>
+              </div>
+              <div class="widget-boxed-body">
+                <div class="side-list no-border">
+                  <ul>
+                    <li><i class="ti-location-pin padd-r-10"></i>{{trabajo.ciudad}}, {{trabajo.provincia}}</li>
+                    <li><i class="ti-alarm-clock padd-r-10"></i>{{obtenerNombreTipoTrabajo(trabajo.tipoTrabajoId)}}</li>
+                    <li>
+                        <i class="ti-money padd-r-10"></i> 
+                        <span class="noFloat" *ngIf="!trabajo.remuneracionMinima && !trabajo.remuneracionMaxima">A Convenir</span>
+                        <span class="noFloat" *ngIf="trabajo.remuneracionMinima">{{trabajo.remuneracionMinima}}</span>
+                        <span class="noFloat" *ngIf="trabajo.remuneracionMaxima"> - {{trabajo.remuneracionMaxima}}</span>
+                        <span class="noFloat" *ngIf="trabajo.tipoRemuneracion == '1'"> - Remuneración Neta</span>
+                        <span class="noFloat" *ngIf="trabajo.tipoRemuneracion == '2'"> Remuneración Bruta</span>
+                    </li>
+                  </ul>                
+                </div>
+              </div>
+            </div>
+            <!-- End: Job Overview --> 
+            
+            <!-- Start: Opening hour -->
+            <div class="widget-boxed">
+              <div class="widget-boxed-header">
+                <h4><i class="ti-time padd-r-10"></i>Horarios Laborales</h4>
+              </div>
+              <div class="widget-boxed-body">
+                <div class="side-list">
+                  <ul *ngIf="trabajo.tipoHorario == '1'">
+                    <li> Horarios Flexibles</li>
+                  </ul>
+                  <ul *ngIf="trabajo.tipoHorario == '2'">
+
+                    <span *ngFor="let diaTrabajo1 of trabajo.diasLaborales1">
+                        <li class="borderBottom" *ngIf="diaTrabajo1.selected">
+                            <span class="noFloat" > 
+                                {{diaTrabajo1.nombre}} <span>{{trabajo.horario1desde}} - {{trabajo.horario1hasta}}</span>
+                            </span> 
+                            <span class="noFloat" *ngIf="trabajo.horarioTrabajo1 == '2'"> 
+                                <br><span *ngIf="diaTrabajo1.selected">{{trabajo.horario1desdecortado}} - {{trabajo.horario1hastacortado}}</span>
+                            </span> 
+                        </li>
+                    </span>
+
+
+
+                    <span *ngFor="let diaTrabajo2 of trabajo.diasLaborales2">
+                        <li *ngIf="diaTrabajo2.selected">
+                            <span class="noFloat" *ngIf="diaTrabajo2.selected"> 
+                                {{diaTrabajo2.nombre}} <span>{{trabajo.horario2desde}} - {{trabajo.horario2hasta}}</span>
+                            </span> 
+                            <span class="noFloat" *ngIf="trabajo.horarioTrabajo2 == '2'"> 
+                                <br><span *ngIf="diaTrabajo2.selected">{{trabajo.horario2desdecortado}} - {{trabajo.horario2hastacortado}}</span>
+                            </span> 
+                        </li>
+                    </span>
+
+                    <span *ngFor="let diaTrabajo3 of trabajo.diasLaborales3">
+                        <li *ngIf="diaTrabajo3.selected">
+                    
+                            <span class="noFloat" *ngIf="diaTrabajo3.selected"> 
+                                {{diaTrabajo3.nombre}} <span>{{trabajo.horario3desde}} - {{trabajo.horario3hasta}}</span>
+                            </span> 
+                            <span class="noFloat" *ngIf="trabajo.horarioTrabajo3 == '2'"> 
+                                <br><span *ngIf="diaTrabajo3.selected">{{trabajo.horario3desdecortado}} - {{trabajo.horario3hastacortado}}</span>
+                            </span> 
+                        </li>
+                    </span>    
+                    
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Start: Location
+            <div class="widget-boxed">
+              <div class="widget-boxed-header">
+                <h4><i class="ti-time padd-r-10"></i>Location</h4>
+              </div>
+              <div class="widget-boxed-body">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3430.566512514854!2d76.8192921147794!3d30.702470481647698!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390fecca1d6c0001%3A0xe4953728a502a8e2!2sChandigarh!5e0!3m2!1sen!2sin!4v1520136168627" width="100%" height="360" frameborder="0" style="border:0" allowfullscreen></iframe>
+              </div>
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <!-- End Row --> 
+    </div>
+  </section>
+  <!-- ====================== TRABAJOS SIMILARES (VISUALIZA TRABAJOS DE LA MISMA AREA, FALTA IMPLEMENTAR BACKEND) ================ --> 
+  <!-- <section class="padd-bot-60 padd-top-40 similarJobs">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="mrg-bot-40 text-center">Trabajos Similares</h2>
+        </div>
+      </div>
+      <div class="row"> 
+        <div class="col-md-3 col-sm-6">
+          <div class="utf_grid_job_widget_area"> <span class="job-type full-type">Full Time</span>
+            <div class="u-content">
+              <div class="avatar box-80"> <a [routerLink]="[ '/trabajos', 'donemilio' ]"> <img class="img-responsive" src="assets/img/donemilio.png" alt=""> </a> </div>
+              <h5><a [routerLink]="[ '/trabajos', 'donemilio' ]">Rediseño de producto</a></h5>
+              <p class="text-muted">Don Emilio SRL</p>
+            </div>
+            <div class="utf_apply_job_btn_item"> <a [routerLink]="[ '/trabajos', 'donemilio' ]" class="btn job-browse-btn btn-radius br-light">Aplicar</a> </div>
+          </div>
+        </div>
+        
+        
+        <div class="col-md-3 col-sm-6">
+          <div class="utf_grid_job_widget_area"> <span class="job-type full-type">Full Time</span>
+            <div class="u-content">
+              <div class="avatar box-80"> <a href="employer-detail.html"> <img class="img-responsive" src="assets/img/oversoft.png" alt=""> </a> </div>
+              <h5><a href="employer-detail.html">Atencion al cliente</a></h5>
+              <p class="text-muted">Cafe Argentino</p>
+            </div>
+            <div class="utf_apply_job_btn_item"> <a href="job-detail.html" class="btn job-browse-btn btn-radius br-light">Aplicar</a> </div>
+          </div>
+        </div>
+        
+        
+        <div class="col-md-3 col-sm-6">
+          <div class="utf_grid_job_widget_area"> <span class="job-type part-type">Part Time</span>
+            <div class="u-content">
+              <div class="avatar box-80"> <a href="employer-detail.html"> <img class="img-responsive" src="assets/img/globant.png" alt=""> </a> </div>
+              <h5><a href="employer-detail.html">Desarrollador Backend</a></h5>
+              <p class="text-muted">Globant</p>
+            </div>
+            <div class="utf_apply_job_btn_item"> <a href="job-detail.html" class="btn job-browse-btn btn-radius br-light">Aplicar</a> </div>
+          </div>
+        </div>
+        
+        
+        <div class="col-md-3 col-sm-6">
+          <div class="utf_grid_job_widget_area"> <span class="job-type part-type">Part Time</span>
+            <div class="u-content">
+              <div class="avatar box-80"> <a href="employer-detail.html"> <img class="img-responsive" src="assets/img/lacteosavenida.png" alt=""> </a> </div>
+              <h5><a href="employer-detail.html">Despachante de producto</a></h5>
+              <p class="text-muted">Lacteos avenida</p>
+            </div>
+            <div class="utf_apply_job_btn_item"> <a href="job-detail.html" class="btn job-browse-btn btn-radius br-light">Aplicar</a> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->

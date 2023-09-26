@@ -30,13 +30,13 @@ export class InicioComponent implements OnInit {
   cantSolicitGastronomia : number ;
   cantSolicitComunicacion : number ;
   cantSolicitEducacion : number ;
+  cantSolicitRRHH : number ;
 
   constructor(private renderer: Renderer2,
               @Inject(DOCUMENT) private _document : any,
               private trabajoFirestoreService : TrabajoFirestoreService,
               private empresaFirestoreService : EmpresaFirestoreService,
-              private tipotrabajoFirestoreService : TipotrabajoFirestoreService,
-              private substring: SubstringPipe) { }
+              private tipotrabajoFirestoreService : TipotrabajoFirestoreService) { }
 
   ngAfterViewInit(){
     var s = this.renderer.createElement("script");
@@ -88,6 +88,7 @@ export class InicioComponent implements OnInit {
       this.cantSolicitGastronomia = await res.filter(trabajo=>trabajo.areaTrabajoId === '2w6aer7y3e4CZ5cWHIAt').length;
       this.cantSolicitComunicacion = await res.filter(trabajo=>trabajo.areaTrabajoId === 'N0NAcgWKINN5NQ5nxAFH').length;
       this.cantSolicitEducacion = await res.filter(trabajo=>trabajo.areaTrabajoId === 'oWSHkalva8oO5tirooAp').length;
+      this.cantSolicitRRHH = await res.filter(trabajo=>trabajo.areaTrabajoId === 'RYbZZ6fPpZJAk3j70D0b').length;
     });
     
   }

@@ -5,10 +5,13 @@ import { TrabajosFrontendRoutingModule } from './trabajos-frontend-routing.modul
 import { AgmCoreModule } from '@agm/core';
 import { GooglePlaceModule } from 'ngx-google-places-autocomplete';
 import { environment } from 'src/environments/environment';
+import { TrabajoComponent } from './pages/trabajo/trabajo.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    TrabajoComponent
+  ],
   imports: [
     CommonModule,
     TrabajosFrontendRoutingModule,

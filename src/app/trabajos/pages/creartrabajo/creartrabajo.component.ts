@@ -111,8 +111,8 @@ export class CreartrabajoComponent implements OnInit {
     edadMaxima: [ , ],
     nivelEstudioMinimo: [ , [Validators.required]],
     estadoEstudios: [ , [Validators.required]],
-    areasEstudio: [],
-    experienciasLaboralesPrevias: [ ],
+    areasEstudio: [ , ],
+    experienciasLaboralesPrevias: [ , ],
     noEspecificarEmpresa : [false],
     alternativaNombre : [, Validators.maxLength(25)]
   }); 
@@ -341,7 +341,7 @@ export class CreartrabajoComponent implements OnInit {
 
     this.nuevoTrabajo.descripcionPuesto.replace("\n", "<br>");
     this.nuevoTrabajo.areasEstudio?.replace("\n", "<br>");
-    this.nuevoTrabajo.experienciasLaboralesPrevias.replace("\n", "<br>");
+    this.nuevoTrabajo.experienciasLaboralesPrevias?.replace("\n", "<br>");
 
     this.trabajoFirestoreService.update(this.nuevoTrabajo).then(res=>{
       Swal.fire({
@@ -379,7 +379,7 @@ export class CreartrabajoComponent implements OnInit {
   
       this.nuevoTrabajo.descripcionPuesto.replace("\n", "<br>");
       this.nuevoTrabajo.areasEstudio?.replace("\n", "<br>");
-      this.nuevoTrabajo.experienciasLaboralesPrevias.replace("\n", "<br>");
+      this.nuevoTrabajo.experienciasLaboralesPrevias?.replace("\n", "<br>");
 
       console.log(this.nuevoTrabajo);
   
